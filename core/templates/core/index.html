@@ -11,5 +11,10 @@
       {% endif %}
 
 	<h4>Welcome to SynergyDB home page.</h4>
+	<br><br>
+	<h5>{{ request.user }}</h5><br>
+	<p><a href="{% url 'users:change-password' %}">Change Password</a></p>
+	<p><a href="{% url 'users:create-user' %}">Add Employee</a></p>
+	<p><a href="{% url 'users:logout' %}">Logout</a></p>
 
 {% endblock %}

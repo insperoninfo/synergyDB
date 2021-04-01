@@ -6,6 +6,7 @@ from .models import Profile
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from core.decorators import allowed_users
 
 
 user_admin_required = user_passes_test(lambda user: user.is_superuser, login_url=r'users/accounts/login')
@@ -21,12 +22,12 @@ class AdminRequiredMixin(object):
         if usr.is_authenticated and usr.is_superuser:
             pass
         else:
-            return redirect('login')
+            return redirect('users:login')
 
         return super().dispatch(request, *args, **kwargs)
 
 
-@admin_user_required
+@allowed_users(allowed_roles=['admin'])
 def createUser(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
@@ -35,10 +36,8 @@ def createUser(request):
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
-            print(user.pk)
-            # login(request, user)
-            usr_profile = Profile.objects.get(user=user)
-            return redirect('users:update-profile', pk=usr_profile.pk)
+            
+            return redirect('users:update-profile', pk=user.profile.pk)
     else:
         form = UserForm()
     return render(request, r'users/createUser.html', {'form': form})
@@ -51,7 +50,7 @@ class ProfileUpdateView(AdminRequiredMixin, UpdateView):
 	success_url = '/'
 
 
-@login_required
+@login_required(login_url='accounts/login')
 def changePassword(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
