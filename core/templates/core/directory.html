@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+	<div>
+		<br>
+		<h5>Folders</h5><br>
+		{% for directory in child_directories %}
+			<a href="{% url 'core:directory' directory.pk %}">{{ directory.name }} </a><br><hr>
+		{% endfor %}
+		<br><br>
+
+		<h5>Files</h5>
+		{% for document in documents %}
+			{{ document.file.name }} <br>
+		{% endfor %}
+
+		<br><br>
+	  {% include 'core/create_dir_form.html' %}
+
+	  <br><br>
+	  {% include 'core/document_upload_form.html' %}
+
+	</div>
+
+{% endblock %}

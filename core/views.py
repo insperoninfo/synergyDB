@@ -55,7 +55,7 @@ def createDirectory(request,pk):
 					form.instance.branch = branch
 					
 					form.save()
-					return redirect('core:index')
+					return redirect('core:directory', pk=pk)
 			except:
 				return HttpResponse('Some error occured!!')
 
@@ -86,7 +86,7 @@ def uploadDocument(request, pk):
 					
 						document_instance.save()
 
-					return redirect('core:index')
+					return redirect('core:directory', pk=pk)
 
 			except:
 				return HttpResponse('Some error occured!!')
@@ -102,6 +102,29 @@ def uploadDocument(request, pk):
 	return render(request, 'core/document_upload_form.html', context)
 
 	
+@login_required
+def directoryContent(request, pk):
+	current_directory = Directory.objects.get(pk=pk)
+	current_user = request.user
 
+	if current_directory.branch != current_user.profile.branch:
+		return HttpResponse('You are not authorized to view this page.')
+
+	else:
+		child_directories = Directory.objects.filter(parent_directory=current_directory)
+		documents = Document.objects.filter(directory = current_directory)
+
+		create_dir_form = DirectoryCreationForm()
+		document_upload_form = DocumentUploadForm()
+
+		context = {
+			'child_directories' : child_directories,
+			'documents' : documents,
+			'parent_dir_pk' : current_directory.pk,
+			'create_dir_form' : create_dir_form,
+			'document_upload_form' : document_upload_form,
+		}	
+
+		return render(request, 'core/directory.html', context)	
 
 
