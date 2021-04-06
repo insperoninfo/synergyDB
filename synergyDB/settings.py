@@ -127,6 +127,9 @@ LOGIN_URL = 'users/accounts/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # to expire user session after browser close
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
