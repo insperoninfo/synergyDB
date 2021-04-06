@@ -1,26 +1,13 @@
-{% extends 'core/base.html' %}
-
-{% block content %}
-
-<style type="text/css">
-	.flup{
-		color: black;
-		padding: 50px 255px;
-	}
-</style>
-	
 
 	
-	<div class="flup">
-		<form method="post" action = "{% url 'core:create-dir' parent_dir_pk %}" enctype="multipart/form-data">
+<div class="flup">
+	<form method="post" action = "{% url 'core:create-dir' parent_dir_pk %}" enctype="multipart/form-data">
 			{% csrf_token %}
-	  		Folder Name:<br><br>
+	  		<h5>Folder Name:</h5><br>
 	  		
 	  {{ create_dir_form.as_p }}
-	  <br><br>
+	  
 	  <button type="submit">Create</button>
 	</form>
-	</div>
+</div>
 
-
-{% endblock %}

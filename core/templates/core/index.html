@@ -2,30 +2,29 @@
 
 {% block content %}
 
-      {% if messages %}
-      <ul class="messages">
-          {% for message in messages %}
-          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-          {% endfor %}
-      </ul>
-      {% endif %}
-
+      
 	<h4>Welcome to SynergyDB home page.</h4>
 	<br><br>
-  <h4>{{ root_dir }}</h4>
-	<h5>{{ current_user }}>{{ current_user_branch }}</h5> <br>
+  <h6>{{ root_dir }}</h6>
+
+  <h5>Directories</h5>
   {% for folder in root_dir_folders %}
-    <h5>{{ folder.name }}</h5>
+    <h6>{{ folder.name }}</h6>
   {% endfor %}
 
+  <br>
+  <h5>Doccuments</h5>
+
   {% for document in root_dir_documents %}
-    <h5>{{ document.file.name }}</h5>
-    <small>{{ document.updated_by }}</small>
+    <h6>{{ document.file.name }}</h6>
   {% endfor %}
 
 
   <br><br>
   {% include 'core/create_dir_form.html' %}
+
+  <br><br>
+  {% include 'core/document_upload_form.html' %}
 	
   <p><a href="{% url 'users:change-password' %}">Change Password</a></p>
 	<p><a href="{% url 'users:create-user' %}">Add Employee</a></p>

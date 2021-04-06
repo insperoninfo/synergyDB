@@ -16,6 +16,7 @@ def index(request):
 	root_dir_folders = Directory.objects.filter(parent_directory = root_dir[0])
 
 	create_dir_form = DirectoryCreationForm()
+	document_upload_form = DocumentUploadForm()
 
 	context = {
 		'current_user' : current_user,
@@ -25,13 +26,14 @@ def index(request):
 		'root_dir_folders' : root_dir_folders,
 		'parent_dir_pk' : root_dir[0].pk,
 		'create_dir_form' : create_dir_form,
+		'document_upload_form' : document_upload_form,
 
 	}
 
 	return render(request, 'core/index.html', context)
 
 
-
+@login_required
 def createDirectory(request,pk):
 	form = DirectoryCreationForm()
 	if request.method == 'POST':
@@ -61,7 +63,43 @@ def createDirectory(request,pk):
 	return render(request, 'core/create_dir_form.html', {'create_dir_form': form, "parent_dir_pk":pk})
 
 
-			
+@login_required
+def uploadDocument(request, pk):
+	form = DocumentUploadForm()
+
+	if request.method == 'POST':
+		created_by = request.user
+		parent_directory = Directory.objects.get(pk = pk)
+		branch = parent_directory.branch
+
+		if created_by.profile.branch != branch:
+			messages.warning(request, 'You are not authorized to perform the action.')
+			return redirect('core:index')
+
+		else:
+			try:
+				form = DocumentUploadForm(request.POST, request.FILES)
+				if form.is_valid():
+					filelist = request.FILES.getlist('file')
+					for file in filelist:
+						document_instance = Document(directory=parent_directory, file = file, updated_by=created_by)
+					
+						document_instance.save()
+
+					return redirect('core:index')
+
+			except:
+				return HttpResponse('Some error occured!!')
+
+
+	# For development process only. Change to error msg on production.
+	context = {
+		'document_upload_form' :form,
+		'parent_dir_pk' : pk,
+
+	}
+
+	return render(request, 'core/document_upload_form.html', context)
 
 	
 
