@@ -20,6 +20,7 @@
 		<h5>Files</h5>
 		{% for document in documents %}
 			{{ document.file.name }} <br>
+			<small><a href="{% url 'core:delete-document' document.pk %}">Delete</a></small>
 		{% endfor %}
 
 		<br><br>

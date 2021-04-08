@@ -1,5 +1,13 @@
 from django.urls import path
-from .views import index, createDirectory, uploadDocument, directoryContent, DirectoryUpdateView, DirectoryDeleteView
+from .views import (
+				index, 
+				createDirectory, 
+				uploadDocument, 
+				directoryContent, 
+				DirectoryUpdateView, 
+				DirectoryDeleteView,
+				DocumentDeleteView,
+			)
 
 app_name = 'core'
 
@@ -10,5 +18,5 @@ urlpatterns = [
 	path('directory/<int:pk>', directoryContent, name='directory'),
 	path('update-directory/<int:pk>', DirectoryUpdateView.as_view(), name='update-directory'),
 	path('delete-directory/<int:pk>', DirectoryDeleteView.as_view(), name='delete-directory'),
-
+	path('delete-document/<int:pk>', DocumentDeleteView.as_view(), name='delete-document'),
 ]
