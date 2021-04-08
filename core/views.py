@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, reverse
 from .decorators import allowed_users
 from django.contrib.auth.decorators import login_required
 from .models import Directory, Document
 from .forms import DirectoryCreationForm, DocumentUploadForm
 from django.contrib import messages
+from django.views.generic import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import HttpResponseForbidden
 
 
 @login_required
@@ -108,7 +111,7 @@ def directoryContent(request, pk):
 	current_user = request.user
 
 	if current_directory.branch != current_user.profile.branch:
-		return HttpResponse('You are not authorized to view this page.')
+		return HttpResponseForbidden('<h1>403 Forbidden</h1>')
 
 	else:
 		child_directories = Directory.objects.filter(parent_directory=current_directory)
@@ -118,6 +121,7 @@ def directoryContent(request, pk):
 		document_upload_form = DocumentUploadForm()
 
 		context = {
+			'current_directory' : current_directory,
 			'child_directories' : child_directories,
 			'documents' : documents,
 			'parent_dir_pk' : current_directory.pk,
@@ -128,3 +132,21 @@ def directoryContent(request, pk):
 		return render(request, 'core/directory.html', context)	
 
 
+class DirectoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+	model = Directory
+	form_class = DirectoryCreationForm
+	template_name = 'core/update_dir_form.html'
+	success_message = "Updated successfully"
+
+	def test_func(self):
+		usr = self.request.user
+		if usr.is_authenticated and usr.is_superuser:
+			directory = Directory.objects.get(pk = self.kwargs['pk'])
+			print(directory)
+			if usr.profile.branch == directory.branch and directory.name != 'root':
+				return True
+		else:
+			return False
+
+	def get_success_url(self):
+		return reverse('core:directory', kwargs = {'pk' : self.kwargs['pk']})
