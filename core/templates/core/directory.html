@@ -7,8 +7,9 @@
 
 		{% if current_directory.name != 'root' %}
 			<small><a href="{% url 'core:update-directory' parent_dir_pk %}">Rename</a></small>
+			<small><a href="{% url 'core:delete-directory' parent_dir_pk %}">Delete</a></small>
 		{% endif %}
-		
+
 		<br>
 		<h5>Folders</h5><br>
 		{% for directory in child_directories %}

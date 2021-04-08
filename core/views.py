@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Directory, Document
 from .forms import DirectoryCreationForm, DocumentUploadForm
 from django.contrib import messages
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseForbidden
 
@@ -150,3 +150,24 @@ class DirectoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 	def get_success_url(self):
 		return reverse('core:directory', kwargs = {'pk' : self.kwargs['pk']})
+
+
+class DirectoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+	model = Directory
+	template_name = 'core/dir_delete_confirmation.html'
+	success_url = '/'
+
+	def test_func(self):
+		usr = self.request.user
+		if usr.is_authenticated and usr.is_superuser:
+			directory = Directory.objects.get(pk = self.kwargs['pk'])
+			print(directory)
+			if usr.profile.branch == directory.branch and directory.name != 'root':
+				return True
+		else:
+			return False
+
+	def get_success_url(self):
+		current_directory = Directory.objects.get(pk = self.kwargs['pk'])
+		parent_dir_pk = current_directory.parent_directory.pk
+		return reverse('core:directory', kwargs = {'pk' : parent_dir_pk})
