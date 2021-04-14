@@ -17,7 +17,7 @@ def index(request):
 	root_dir = Directory.objects.filter(name='root').filter(branch = current_user_branch)
 	root_dir_documents = Document.objects.filter(directory = root_dir[0])
 	root_dir_folders = Directory.objects.filter(parent_directory = root_dir[0])
-
+	current_path = root_dir[0].str()
 	create_dir_form = DirectoryCreationForm()
 	document_upload_form = DocumentUploadForm()
 
@@ -25,6 +25,7 @@ def index(request):
 		'current_user' : current_user,
 		'current_user_branch' : current_user_branch,
 		'root_dir' : root_dir[0],
+ 		'current_path' : current_path,
 		'root_dir_documents' : root_dir_documents,
 		'root_dir_folders' : root_dir_folders,
 		'parent_dir_pk' : root_dir[0].pk,
@@ -44,9 +45,8 @@ def createDirectory(request,pk):
 		parent_directory = Directory.objects.get(pk = pk)
 		branch = parent_directory.branch
 
-		if created_by.profile.branch != branch:
-			messages.warning(request, 'You are not authorized to perform the action.')
-			return redirect('core:index')
+		if created_by.profile.branch != branch or created_by.is_superuser == False:
+			return HttpResponseForbidden('<h1>403 Forbidden</h1>') 
 
 		else:
 			try:	
@@ -117,6 +117,11 @@ def directoryContent(request, pk):
 		child_directories = Directory.objects.filter(parent_directory=current_directory)
 		documents = Document.objects.filter(directory = current_directory)
 
+		for d in documents:
+			print(d.filename())
+		current_path = current_directory.str()
+
+
 		create_dir_form = DirectoryCreationForm()
 		document_upload_form = DocumentUploadForm()
 
@@ -127,6 +132,7 @@ def directoryContent(request, pk):
 			'parent_dir_pk' : current_directory.pk,
 			'create_dir_form' : create_dir_form,
 			'document_upload_form' : document_upload_form,
+			'current_path' : current_path,
 		}	
 
 		return render(request, 'core/directory.html', context)	

@@ -1,15 +1,196 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Synergy</title>
+    <title>Synergy</title>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}">
+    <title>Admin dashbord</title>
 </head>
-<body>
 
-	{% include 'core/messages.html' %}
+<!-- Bootstrap starts -->
 
-	{% block content %}
+<!-- Bootstrap ends -->
 
-	{% endblock %}
+
+
+<body id="body">
+
+    <!-- Navbar starts -->
+
+    <div class="container1">
+        <nav class="navbar">
+            <div class="nav_icon" onclick="toggleSidebar()">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </div>
+
+        </nav>
+        <!-- end navbar -->
+
+
+        <!-- main body part here-->
+        <main>
+            {% block content %} {% endblock %}
+
+        </main>
+        <!-- end main body part here -->
+
+
+        <!-- sidebar start from here -->
+
+        <div id="sidebar">
+            <div class="sidebar__title">
+                <div class="sidebar__img">
+                    <img src="assets/logo.png">
+                    <h1>synergy-management</h1>
+                </div>
+                <i onclick="closeSidebar()" class="fa fa-times" id="sidebarIcon" aria-hidden="true"></i>
+            </div>
+
+            <div class="sidebar__menu">
+                <div class="sidebar__link active_menu_link">
+                    <i class="fa fa-dashboard"></i>
+                    <a href="#">Dashboard</a>
+                </div>
+                <hr>
+                <div class="sidebar__link">
+                    <i class="fa fa-user-secret" aria-hidden="true"></i>
+                    <a href="#">Synergy-info</a>
+                </div>
+                <div class="sidebar__link">
+                    <i class="fa fa-building-o"></i>
+                    <a href="#">Public-folder</a>
+                </div>
+
+                <div class="sidebar__link">
+                    <i class="fa fa-wrench"></i>
+                    <a href="#">Setting</a>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- end sidebar here -->
+
+    </div>
+
+    <!-- Footer starts -->
+    <!--============= footer here============================ -->
+    <footer class="sticky-footer" style="background: rgba(99, 107, 104, 0.3);">
+        <div class="container">
+            <div class="text-center">
+                <small style="color: blueviolet;">Copyright © synergy 2021</small>
+            </div>
+        </div>
+    </footer>
+    <!-- ==============end the footer here============ -->
+
+    <!-- Footer Ends -->
+
+
+    <!-- Script files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+
+    <!-- script start -->
+    <script>
+        var sidebarOpen = false;
+        var sidebar = document.getElementById("sidebar");
+        var sidebarCloseIcon = document.getElementById("sidebarIcon");
+
+        function toggleSidebar() {
+            if (!sidebarOpen) {
+                sidebar.classList.add("sidebar_responsive");
+                sidebarOpen = true;
+            }
+        }
+
+        function closeSidebar() {
+            if (sidebarOpen) {
+                sidebar.classList.remove("sidebar_responsive");
+                sidebarOpen = false;
+            }
+        }
+
+        // upload button start 
+        Array.prototype.forEach.call(
+            document.querySelectorAll(".file-upload__button"),
+            function(button) {
+                const hiddenInput = button.parentElement.querySelector(
+                    ".file-upload__input"
+                );
+                const label = button.parentElement.querySelector(".file-upload__label");
+                const defaultLabelText = "No file(s) selected";
+
+                // Set default text for label
+                label.textContent = defaultLabelText;
+                label.title = defaultLabelText;
+
+                button.addEventListener("click", function() {
+                    hiddenInput.click();
+                });
+
+                hiddenInput.addEventListener("change", function() {
+                    const filenameList = Array.prototype.map.call(hiddenInput.files, function(
+                        file
+                    ) {
+                        return file.name;
+                    });
+
+                    label.textContent = filenameList.join(", ") || defaultLabelText;
+                    label.title = label.textContent;
+                });
+            }
+        );
+        // end upload button
+
+        
+
+
+        // // ubload file name  and byte size
+
+
+        // function myFunction() {
+        //     var x = document.getElementById("myFile");
+        //     var txt = "";
+        //     if ('files' in x) {
+        //         if (x.files.length == 0) {
+        //             txt = "Select one or more files.";
+        //         } else {
+        //             for (var i = 0; i < x.files.length; i++) {
+        //                 txt += "<br><strong>" + (i + 1) + ". file</strong><br>";
+        //                 var file = x.files[i];
+        //                 if ('name' in file) {
+        //                     txt += "name: " + file.name + "<br>";
+        //                 }
+        //                 if ('size' in file) {
+        //                     txt += "size: " + file.size + " bytes <br>";
+        //                 }
+        //             }
+        //         }
+        //     } else {
+        //         if (x.value == "") {
+        //             txt += "Select one or more files.";
+        //         } else {
+        //             txt += "The files property is not supported by your browser!";
+        //             txt += "<br>The path of the selected file: " + x.value; // If the browser does not support the files property, it will return the path of the selected file instead. 
+        //         }
+        //     }
+        //     document.getElementById("demo").innerHTML = txt;
+        // }
+    </script>
+    <!-- end script -->
 
 </body>
+
 </html>
