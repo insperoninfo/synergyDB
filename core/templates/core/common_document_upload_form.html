@@ -1,0 +1,10 @@
+
+
+<form method="POST" action="{% url 'core:upload-common-document' %}"  enctype="multipart/form-data">
+		{% csrf_token %}
+  		<h5>Upload Files:</h5><br>
+  		<input type="text" name="parent_pk" hidden readonly value="1">
+  		{{ document_upload_form.as_p }}
+  		
+  <input type="submit" value="submit" name="submit">
+</form>

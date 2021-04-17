@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from core.decorators import allowed_users
+from django.http import HttpResponseForbidden
 
 
 user_admin_required = user_passes_test(lambda user: user.is_superuser, login_url=r'users/accounts/login')
@@ -22,7 +23,7 @@ class AdminRequiredMixin(object):
         if usr.is_authenticated and usr.is_superuser:
             pass
         else:
-            return redirect('users:login')
+            return HttpResponseForbidden('<h1>403 Forbidden</h1>')
 
         return super().dispatch(request, *args, **kwargs)
 

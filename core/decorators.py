@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.http import HttpResponseForbidden
 
 def allowed_users(allowed_roles=[]):
 	def decorator(view_func):
@@ -12,6 +13,6 @@ def allowed_users(allowed_roles=[]):
 			if group in allowed_roles:
 				return view_func(request, *args, **kwargs)
 			else:
-				return HttpResponse("You are not authorized to view this page.")
+				return HttpResponseForbidden('<h1>403 Forbidden</h1>') 
 		return wrapper_func
 	return decorator

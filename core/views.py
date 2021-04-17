@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, HttpResponse, reverse
 from .decorators import allowed_users
 from django.contrib.auth.decorators import login_required
-from .models import Directory, Document
-from .forms import DirectoryCreationForm, DocumentUploadForm
+from .models import Directory, Document, CommonDocument
+from .forms import DirectoryCreationForm, DocumentUploadForm, CommonDocumentUploadForm
 from django.contrib import messages
 from django.views.generic import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseForbidden
+from users.views import AdminRequiredMixin
 
 
 @login_required
@@ -198,3 +199,41 @@ class DocumentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 		document = Document.objects.get(pk = self.kwargs['pk'])
 		parent_dir_pk = document.directory.pk
 		return reverse('core:directory', kwargs = {'pk' : parent_dir_pk})
+
+
+
+@allowed_users(allowed_roles=['admin'])
+def uploadCommonDocuments(request):
+	form = CommonDocumentUploadForm()
+
+	if request.method == 'POST':
+		created_by = request.user
+
+		try:
+			form = CommonDocumentUploadForm(request.POST, request.FILES)
+			if form.is_valid():
+				filelist = request.FILES.getlist('file')
+				for file in filelist:
+					document_instance = CommonDocument(file = file, updated_by=created_by)
+				
+					document_instance.save()
+
+				return redirect('core:index')
+
+		except:
+			return HttpResponse('Some error occured!!')
+
+	# For development process only. Change to error msg on production.
+	context = {
+		'document_upload_form' :form,
+
+	}
+
+	return render(request, 'core/common_document_upload_form.html', context)
+
+
+
+class CommonDocumentDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
+	model = CommonDocument
+	template_name = 'core/document_delete_confirmation.html'
+	success_url = '/'

@@ -45,3 +45,16 @@ class Document(models.Model):
 
 	def __str__(self):
 		return os.path.join(self.directory.str(),self.filename())
+
+
+class CommonDocument(models.Model):
+	file = models.FileField(upload_to = 'common_documents')
+	created_at = models.DateTimeField(auto_now_add = True)
+	updated_at = models.DateTimeField(auto_now = True)
+	updated_by = models.ForeignKey(User, null=True, on_delete = models.SET_NULL)
+
+	def filename(self):
+		return os.path.basename(self.file.name)
+
+	def __str__(self):
+		return os.path.join(self.filename())
