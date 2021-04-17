@@ -10,7 +10,7 @@ BRANCH_CHOICES = (
 
 def get_upload_path(instance, filename):
 	print(filename)
-	upload_path = f'{instance.directory.str()}/{filename}'
+	upload_path = os.path.join(instance.directory.str(), filename)
 
 	return upload_path
 
@@ -25,9 +25,9 @@ class Directory(models.Model):
 
 	def str(self):
 		if self.parent_directory:
-			return f'{self.parent_directory.str()}/{self.name}'
+			return os.path.join(self.parent_directory.str(), self.name)
 		else:
-			return f'{self.branch}:~/{self.name}'
+			return os.path.join(self.branch,self.name)
 
 	def __str__(self):
 		return self.str()		
@@ -44,4 +44,4 @@ class Document(models.Model):
 		return os.path.basename(self.file.name)
 
 	def __str__(self):
-		return f'{self.directory.str()}/{self.file.name}'
+		return os.path.join(self.directory.str(),self.filename())
