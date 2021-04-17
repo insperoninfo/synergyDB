@@ -13,14 +13,6 @@
     <!-- end foler and  file list and blcok -->
     <!-- Button to for create folder modal -->
 
-    <button type="button" class="btn btn-outline-primary ml-5 btn1" data-toggle="modal" data-target="#myModal">
-
-    create folder
-    <a href="#">
-        <i class="material-icons" style="font-size:15px">create_new_folder</i>
-    </a>
-
-   </button>
     <!-- uplaod -->
     <button type="button" class="btn btn-outline-primary ml-5 btn1" data-toggle="modal" data-target="#myModal1">upload file
   
@@ -53,53 +45,7 @@
 <!-- end   button of index navbar here -->
 
 <!-- The Modal folder  -->
-<div class="modal" id="myModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <!-- {% include 'core/create_dir_form.html' %} -->
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-
-                    {% include 'core/create_dir_form.html' %}
-             
-
-            </div>
-
-            <!-- Modal footer -->
-
-
-        </div>
-    </div>
-</div>
-
-<!-- uplaol modal-box part -->
-<div class="modal" id="myModal1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Upload Files</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-
-                {% include 'core/document_upload_form.html' %}
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!--  end upload button modal -->
 
 
 <!-- logout modal  form here  -->
@@ -127,29 +73,65 @@
 
 <!--============ end logout modal=============== -->
 
+<h1>{{ current_user_branch }}</h1><br>
+
+<div class="container">
+    <h3>Common Documents</h3>
+    <hr>
+    <!-- exel colum -->
+    <div class="row">
+        {% for document in common_documnts %}
+        <div class="col-2 col-md-3 col-xs-4 file-">
+            
+                <div class="card" style="width: 5rem; background: lightblue;    width: [object Object]px; 
+                    height: [object Object]px; 
+                    background: lightskyblue; 
+                    border: solid #BDBDBD 1px; 
+                    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
+                    -webkit-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
+                    -moz-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ">
+                    <a href="#" class="file-thamb">
+                    <i class="fa fa-file-excel-o" style="font-size:48px;color: white"></i>
+
+                    <small style="font-size: 12px; padding-top: 4px;">{{ document.file.name }}</small>
+                    <a href=""></a>
+
+                    <small style="font-size: 10px;">{{ document.updated_at }}</small>
+                    <hr>
+                    <small><a href="{% url 'core:delete-document' document.pk %}">Delete</a></small>
+                </div>
+            
+        </div>
+
+
+        {% endfor %}
+
+
+
+    </div>
+</div>
 
 
 <!-- folder all folder create here -->
 <div class="container content-wrapper ">
-    <h3>{{ current_path }}</h3>
+    
     <h5>Folders</h5>
     <hr>
     <div class="folder pt-2">
         <div class="row ">
-            {% for folder in root_dir_folders %}
+        
             <div class=" col-2 col-md-2 col-sm-4 col-xs-4">
 
-                <a href="{%  url 'core:directory' folder.pk %}"><i class="fa fa-folder" style="font-size:48px;color:#ffcc66;    width: [object Object]px; 
+                <a href="{%  url 'core:directory' root_dir.pk %}"><i class="fa fa-folder" style="font-size:48px;color:#ffcc66;    width: [object Object]px; 
                     height: [object Object]px; 
                     background: #F8F8F8; 
                     border: solid #BDBDBD 1px; 
                     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
                     -webkit-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
                     -moz-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  "></i>
-            <br><span>{{ folder.name }}</span></a>
+            <br><span>Root</span></a>
 
             </div>
-            {% endfor %}
 
         </div>
     </div>
@@ -158,10 +140,9 @@
 <br>
 <br>
 <!--  file thumbnails here -->
-<div class="container">
+<!-- <div class="container">
     <h5>Files</h5>
     <hr>
-    <!-- exel colum -->
     <div class="row">
         {% for document in root_dir_documents %}
         <div class="col-2 col-md-3 col-xs-4 file-">
@@ -192,7 +173,7 @@
 
 
     </div>
-</div>
+</div> -->
 
 
 <!--  end  thumbnails---- -->

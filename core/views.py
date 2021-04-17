@@ -15,23 +15,16 @@ def index(request):
 	current_user = request.user
 	current_user_branch = current_user.profile.branch
 
+	common_documnts = CommonDocument.objects.filter()
+
 	root_dir = Directory.objects.filter(name='root').filter(branch = current_user_branch)
-	root_dir_documents = Document.objects.filter(directory = root_dir[0])
-	root_dir_folders = Directory.objects.filter(parent_directory = root_dir[0])
-	current_path = root_dir[0].str()
-	create_dir_form = DirectoryCreationForm()
-	document_upload_form = DocumentUploadForm()
+	
 
 	context = {
 		'current_user' : current_user,
 		'current_user_branch' : current_user_branch,
 		'root_dir' : root_dir[0],
- 		'current_path' : current_path,
-		'root_dir_documents' : root_dir_documents,
-		'root_dir_folders' : root_dir_folders,
-		'parent_dir_pk' : root_dir[0].pk,
-		'create_dir_form' : create_dir_form,
-		'document_upload_form' : document_upload_form,
+		'common_documnts' : common_documnts,
 
 	}
 

@@ -29,6 +29,9 @@ class Directory(models.Model):
 		else:
 			return os.path.join(self.branch,self.name)
 
+	class Meta:
+		ordering = ('-created_at',)
+
 	def __str__(self):
 		return self.str()		
 
@@ -43,6 +46,9 @@ class Document(models.Model):
 	def filename(self):
 		return os.path.basename(self.file.name)
 
+	class Meta:
+		ordering = ('-updated_at',)
+
 	def __str__(self):
 		return os.path.join(self.directory.str(),self.filename())
 
@@ -55,6 +61,9 @@ class CommonDocument(models.Model):
 
 	def filename(self):
 		return os.path.basename(self.file.name)
+
+	class Meta:
+		ordering = ('-updated_at',)
 
 	def __str__(self):
 		return os.path.join(self.filename())
