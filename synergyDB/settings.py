@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     'users',
     'core',
+
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [

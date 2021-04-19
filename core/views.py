@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse, reverse
 from .decorators import allowed_users
+import os
 from django.contrib.auth.decorators import login_required
 from .models import Directory, Document, CommonDocument
 from .forms import DirectoryCreationForm, DocumentUploadForm, CommonDocumentUploadForm
@@ -8,6 +9,7 @@ from django.views.generic import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseForbidden
 from users.views import AdminRequiredMixin
+from .check_file import check_if_file_exists
 
 
 @login_required
@@ -18,7 +20,6 @@ def index(request):
 	common_documnts = CommonDocument.objects.filter()
 
 	root_dir = Directory.objects.filter(name='root').filter(branch = current_user_branch)
-	
 
 	context = {
 		'current_user' : current_user,
@@ -74,19 +75,29 @@ def uploadDocument(request, pk):
 			return redirect('core:index')
 
 		else:
-			try:
-				form = DocumentUploadForm(request.POST, request.FILES)
-				if form.is_valid():
-					filelist = request.FILES.getlist('file')
-					for file in filelist:
+			# try:
+			form = DocumentUploadForm(request.POST, request.FILES)
+			if form.is_valid():
+				filelist = request.FILES.getlist('file')
+				for file in filelist:
+					# check if file already exists
+					if (check_if_file_exists(parent_directory, file)) == True:
+						file_path = os.path.join(parent_directory.str(), file.name)
+
+
+						doc = Document.objects.get(directory=parent_directory, file = file_path)
+						doc.file = file
+						doc.updated_by = created_by
+						doc.save()
+					else:
 						document_instance = Document(directory=parent_directory, file = file, updated_by=created_by)
-					
+				
 						document_instance.save()
 
-					return redirect('core:directory', pk=pk)
+				return redirect('core:directory', pk=pk)
 
-			except:
-				return HttpResponse('Some error occured!!')
+			# except:
+			# 	return HttpResponse('Some error occured!!')
 
 
 	# For development process only. Change to error msg on production.
@@ -111,8 +122,6 @@ def directoryContent(request, pk):
 		child_directories = Directory.objects.filter(parent_directory=current_directory)
 		documents = Document.objects.filter(directory = current_directory)
 
-		for d in documents:
-			print(d.filename())
 		current_path = current_directory.str()
 
 

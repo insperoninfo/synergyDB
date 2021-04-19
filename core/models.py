@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import os
+from core.storage import OverwriteStorage
 
 BRANCH_CHOICES = (
 		("Kathmandu", "KTM"),
@@ -38,7 +39,7 @@ class Directory(models.Model):
 
 class Document(models.Model):
 	directory = models.ForeignKey(Directory, on_delete = models.CASCADE)
-	file = models.FileField(upload_to = get_upload_path)
+	file = models.FileField(upload_to = get_upload_path, storage=OverwriteStorage())
 	created_at = models.DateTimeField(auto_now_add = True)
 	updated_at = models.DateTimeField(auto_now = True)
 	updated_by = models.ForeignKey(User, null=True, on_delete = models.SET_NULL)

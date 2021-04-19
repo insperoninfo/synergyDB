@@ -173,13 +173,13 @@
                     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
                     -webkit-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
                     -moz-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ">
-                    <a href="#" class="file-thamb">
+                    <a href="{{ document.file.url }}" class="file-thamb">
                     <i class="fa fa-file-excel-o" style="font-size:48px;color: white"></i>
                     <br>
                     <small style="font-size: 12px; padding-top: 4px;">{{ document.filename }}</small>
                     <a href=""></a>
 
-                    <small style="font-size: 10px;">{{ document.updated_at }}</small>
+                    <small style="font-size: 10px;">{{ document.updated_at }} {{ document.created_at }}</small>
                     <hr>
                     <small><a href="{% url 'core:delete-document' document.pk %}">Delete</a></small>
                 </div>
