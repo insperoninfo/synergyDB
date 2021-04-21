@@ -1,332 +1,346 @@
 {% extends 'core/base.html' %} {% block content %}
 <!-- log in form -->
 <!-- required bootstrap js -->
-<div class="Button">
 
-    <!-- folder list and file list here -->
 
-    <button class="btn btn-sm btn-outline-secondary " id="btn-list"><i class="fa fa-th-list fa-lg"></i>
-    </button>
-    <button class="btn btn-sm btn-outline-secondary outline-none active " id="btn-grid"><i class="fa fa-th-large fa-lg"></i>
-    </button>
+<section style="padding:8px 10px; background: #F8F8F8;; height:8vh; border-bottom: 1px solid brown; text-align: center; align-items: center;">
+    <div class="Button-nav ">
+        <!-- drop down menu -->
+        <div class="dropdown ">
+            <button onclick="myFunction()" class="dropbtn  btn btn-outline-primary">{{ current_directory.name }}</button>
 
-    <!-- end foler and  file list and blcok -->
-    <!-- Button to for create folder modal -->
+            <div id="myDropdown" class="dropdown-content">
 
-    <button type="button" class="btn btn-outline-primary ml-5 btn1" data-toggle="modal" data-target="#myModal">
+                <a class="item">
+                    <i class="fa fa-download"> download</i>
+                </a>
+                <a class="item" data-toggle="modal" data-target="#myModal">
+                    <i class="material-icons" style="font-size:15px">create_new_folder</i> Create Directory
+                </a>
+                <a class="item" data-toggle="modal" data-target="#myModal1">
+                    <i class="fa fa-upload">Upload Files</i>
+                </a>
 
-    create folder
-    <a href="#">
+                <a class="item" data-toggle="modal" data-target="#updateModel">
+                    <i class="fa fa-refresh"> Rename</i>
+                </a>
+                <a class="item" data-toggle="modal" data-target="#deleteModel">
+                    <i class="fa fa-trash-o"> Delete</i>
+                </a>
+            </div>
+        </div>
+
+        <!-- end the dropdown -->
+
+        <!-- Button to for create folder modal -->
+
+        <button type="button" class="btn btn-outline-primary  btn1" data-toggle="modal" data-target="#myModal">
+
+         Create Directory 
+       <a href="#">
         <i class="material-icons" style="font-size:15px">create_new_folder</i>
-    </a>
+       </a>
 
-   </button>
-    <!-- uplaod -->
-    <button type="button" class="btn btn-outline-primary ml-5 btn1" data-toggle="modal" data-target="#myModal1">upload file
+     </button>
+        <!-- uplaod -->
+        <button type="button" class="btn btn-outline-primary " data-toggle="modal" data-target="#myModal1">Upload File
   
         <a href="#">
             <i class="fa fa-upload"></i>
         </a>
       
- </button>
+      </button>
 
-    <!-- uplaod -->
-
-    <button type="button" class="btn btn-outline-primary  " data-toggle="modal" data-target="#exampleModal" id="logout">
-        <!-- <i class="fa fa-fw fa-sign-out">Logout</i> -->
-        Logout
-        <a href="#">
-            <i class="fa fa-clock-o" aria-hidden="true"></i>
-        </a>
-        <a href="#">
-            <img width="30" src="assets/avatar.svg" alt="" />
-            <!-- <i class="fa fa-user-circle-o" aria-hidden="true"></i> -->
-        </a>
-    </button>
+        <!--end uplaod -->
 
 
+        <!-- start logout -->
 
-    <hr style=" border: 1px solid rgb(218, 182, 182);">
+
+        <div class="dropdown" id="profile">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-user fa-fw fa-2x"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                </li>
+                <li><a href="{% url 'users:change-password' %}"><i class="fa fa-gear fa-fw"></i> Change Password</a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="{% url 'users:logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
 
 
-</div>
-<!-- end   button of index navbar here -->
 
-<!-- The Modal folder  -->
-<div class="modal" id="myModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
+        <!-- end logout here -->
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <!-- {% include 'core/create_dir_form.html' %} -->
+        <!-- folder list and file list here -->
+
+        <button class="btn btn-sm btn-outline-secondary " id="btn-list"><i class="fa fa-th-list fa-lg"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary outline-none active " id="btn-grid"><i class="fa fa-th-large fa-lg"></i>
+        </button>
+
+        <!-- end foler and  file list and blcok -->
+
+
+
+        <!-- <hr class="mt-5"> -->
+        <!-- <hr style=" border: 1px solid rgb(218, 182, 182);"> -->
+        <!-- end   button of index navbar here -->
+
+
+
+
+        <!-- The Modal folder  -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <!-- {% include 'core/create_dir_form.html' %} -->
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        {% include 'core/create_dir_form.html' %}
+
+
+                    </div>
+
+                    <!-- Modal footer -->
+
+
+                </div>
             </div>
+        </div>
 
-            <!-- Modal body -->
-            <div class="modal-body">
 
-                    {% include 'core/create_dir_form.html' %}
-             
+
+         <div class="modal" id="updateModel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <!-- {% include 'core/create_dir_form.html' %} -->
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        {% include 'core/update_dir_form.html' %}
+
+
+                    </div>
+
+                    <!-- Modal footer -->
+
+
+                </div>
+            </div>
+        </div>   
+
+
+        <div class="modal" id="deleteModel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <!-- {% include 'core/create_dir_form.html' %} -->
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        {% include 'core/dir_delete_confirmation.html' %}
+
+
+                    </div>
+
+                    <!-- Modal footer -->
+
+
+                </div>
+            </div>
+        </div> 
+    </div>
+
+
+    <!-- searchbar -->
+
+    <div class="search">
+        <!-- <input type="text" class="searchTerm" placeholder="What are you looking for?" id="myInput" onkeyup="searchFun()"> -->
+        <input class="searchbar" type="text" onkeyup="filter()" placeholder="Search.." name="search">
+        <button type="submit" class="searchButton">
+                 <i class="fa fa-search"></i>
+              </button>
+    </div>
+
+    <!-- end searchbar -->
+    <!-- uplaol modal-box part -->
+    <div class="modal" id="myModal1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Upload Files</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    {% include 'core/document_upload_form.html' %}
+
+                </div>
 
             </div>
-
-            <!-- Modal footer -->
-
-
         </div>
     </div>
-</div>
 
-<!-- uplaol modal-box part -->
-<div class="modal" id="myModal1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Upload Files</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-
-                {% include 'core/document_upload_form.html' %}
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!--  end upload button modal -->
+    <!--  end upload button modal -->
 
 
-<!-- logout modal  form here  -->
+    <!-- logout modal  form here  -->
 
-<!-- Logout Modal-->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+    <!-- Logout Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="{% url 'users:logout' %}">Logout</a>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="{% url 'users:logout' %}">Logout</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- end modal  -->
+    <!-- end modal  -->
 
 
-<!--============ end logout modal=============== -->
+    <!--============ end logout modal=============== -->
+</section>
 
+<!-- <hr style=" border: 1px solid rgb(218, 182, 182); padding-top: 80px:"> -->
+
+<!-- ++++++++main-body-part++++++ -->
 
 
 <!-- folder all folder create here -->
-<div class="container content-wrapper ">
+<div class="container content-wrapper  " style=" margin-top: 40px; width:100%; height: 100vh; overflow: scroll; ">
+
     <h3>{{ current_path }}</h3>
     <h5>Folders</h5>
     <hr>
-    <div class="folder pt-2">
-        <div class="row ">
-            {% for directory in child_directories %}
-            <div class=" col-2 col-md-2 col-sm-4 col-xs-4">
+    <div class="folder pt-2" id="folder-file">
+        <div class="row  " id="row">
+            {% for folder in child_directories %}
+            <div class="card col-2 col-md-2 col-sm-4 col-xs-4 mt-5 " id="col">
 
-                <a href="{%  url 'core:directory' directory.pk %}"><i class="fa fa-folder" style="font-size:48px;color:#ffcc66;    width: [object Object]px; 
-                    height: [object Object]px; 
-                    background: #F8F8F8; 
-                    border: solid #BDBDBD 1px; 
-                    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
-                    -webkit-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
-                    -moz-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  "></i>
-            <br><span>{{ directory.name }}</span></a>
+                <a href="{%  url 'core:directory' folder.pk %}"><i class="fa fa-folder" style="font-size:68px;color:#ffcc66;  "></i>
+            <br><p class="title">{{ folder.name }}</p></a>
 
             </div>
             {% endfor %}
 
         </div>
     </div>
+    <br>
+    <br>
+    <!--  file thumbnails here -->
+    <div class="container-file">
+        <h5>Files</h5>
+        <hr>
+        <!-- exel colum -->
+        <div class="row">
+            {% for document in documents %}
+            <div class="col-2 col-md-3 col-xs-4 file-">
 
-</div>
-<br>
-<br>
-<!--  file thumbnails here -->
-<div class="container">
-    <h5>Files</h5>
-    <hr>
-    <!-- exel colum -->
-    <div class="row">
-    	{% for document in documents %}
-        <div class="col-2 col-md-3 col-xs-4 file-">
-            
-                <div class="card" style="width: 5rem; background: lightblue;    width: [object Object]px; 
-                    height: [object Object]px; 
-                    background: lightskyblue; 
-                    border: solid #BDBDBD 1px; 
-                    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
-                    -webkit-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
-                    -moz-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ">
-                    <a href="{{ document.file.url }}" class="file-thamb">
-                    <i class="fa fa-file-excel-o" style="font-size:48px;color: white"></i>
-                    <br>
-                    <small style="font-size: 12px; padding-top: 4px;">{{ document.filename }}</small>
-                    <a href=""></a>
 
-                    <small style="font-size: 10px;">{{ document.updated_at }} {{ document.created_at }}</small>
-                    <hr>
+                <div href="#" class="card file-thamb " style="width: 8rem; border: 1px solid black;  ">
+                    <i class="fa fa-file-excel-o" style="font-size:68px;color: brown;"></i>
+
+                    <div class="f-name " style="  height: 30px width:200px;  overflow: scroll; font-size: 12px; padding: 5px 8px ; ">{{ document.updated_by.get_full_name }}</div>
+                    <a href="{{ document.file.url }}">
+                        <p class="title">{{ document.filename }} </p>
+                    </a>
+
+                    <small style="font-size: 10px;">{{ document.updated_at }}</small>
+
                     <small><a href="{% url 'core:delete-document' document.pk %}">Delete</a></small>
                 </div>
-            
+
+
+            </div>
+
+
+
+            {% endfor %}
+
+
+
         </div>
-
-
-		{% endfor %}
-
-
-
     </div>
+
+
+    <!--  end floder llist and diplay block -->
+
+    <!-- script for   draga and drop  dile here -->
+
+    <!-- dropdown menu with click -->
+    <script>
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+
+        // searchbar filter here start
+
+        function filter() {
+            let input = document.querySelector('.searchbar').value //<-- Changed to querySelector
+            input = input.toLowerCase();
+            let cards = document.querySelectorAll('.card'); //<-- Changed to querySelectorAll with '.card' selector.
+
+            //loop over cards and compare search with title.
+            cards.forEach((el) => {
+                let title = el.querySelector('.title').textContent.toLowerCase();
+                el.style.display = title.includes(input) ? "list-item " : "none ";
+            });
+        }
+
+
+        // end searchbar filter here
+    </script>
+    <!--  end dropdwon menu -->
+
 </div>
-
-
-<!--  end  thumbnails---- -->
-
-
-<!-- right click -->
-<div id="context-menu">
-    <a class="item">
-        <i class="fa fa-download"></i> download
-    </a>
-    <a class="item" data-toggle="modal" data-target="#myModal">
-        <i class="material-icons" style="font-size:15px">create_new_folder</i> create folder
-    </a>
-    <a class="item" data-toggle="modal" data-target="#myModal1">
-        <i class="fa fa-upload"></i>upload
-    </a>
-    <a class="item">
-        <i class="fa fa-trash-o"></i> Delete
-    </a>
-    <hr>
-    <a class="item">
-        <i class="fa fa-refresh"></i> Rename
-    </a>
-    <a class="item">
-        <i class="fa fa-times"></i> Exit
-    </a>
-</div>
-
-
-<!--  folder  and file diplay block and  list here -->
-
-<!-- <script>
-    $(document).ready(function() {
-        // Grid or list selection
-        $("#btn-list").on("click", function() {
-            $("#main-folders").addClass("flex-column");
-            $("#btn-grid").removeClass("active");
-            $(this).addClass("active");
-        });
-        $("#btn-grid").on("click", function() {
-            $("#main-folders").removeClass("flex-column");
-            $("#btn-list").removeClass("active");
-            $(this).addClass("active");
-        });
-        $("#btn-list").on("click", function() {
-            $("#main-files").addClass("flex-column");
-            $("#btn-grid").removeClass("active");
-            $(this).addClass("active");
-        });
-        $("#btn-grid").on("click", function() {
-            $("#main-files").removeClass("flex-column");
-            $("#btn-list").removeClass("active");
-            $(this).addClass("active");
-        });
-
-        // Open folder and see files
-        $("button.folder-container").on("click", function() {
-            $("#filesGroup").removeClass("d-none");
-            $("#foldersGroup").addClass("d-none");
-        });
-        $("a#backToFolders").on("click", function() {
-            $("#foldersGroup").removeClass("d-none");
-            $("#filesGroup").addClass("d-none");
-        });
-    });
-</script> -->
-<!-- end  folder and  file display  block  and llist  -->
-
-
-<script>
-    // script for  on right clcik  button
-    window.addEventListener("contextmenu", function(event) {
-        event.preventDefault();
-        var contextElement = document.getElementById("context-menu");
-        contextElement.style.top = event.offsetY + "px";
-        contextElement.style.left = event.offsetX + "px";
-        contextElement.classList.add("active");
-    });
-    window.addEventListener("click", function() {
-        document.getElementById("context-menu").classList.remove("active");
-    });
-</script>
-
-<!-- foder file list block  js -->
-
-
-
-<!--  end floder llist and diplay block -->
-
-<!-- script for   draga and drop  dile here -->
-
-
+<!-- end body-conatiner -->
 
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-	<div>
-		<h1>{{ current_directory.name }}</h1>
-
-		{% if current_directory.name != 'root' %}
-			<small><a href="{% url 'core:update-directory' parent_dir_pk %}">Rename</a></small>
-			<small><a href="{% url 'core:delete-directory' parent_dir_pk %}">Delete</a></small>
-		{% endif %}
-
-		<br>
-		<h5>Folders</h5><br>
-		{% for directory in child_directories %}
-			<a href="{% url 'core:directory' directory.pk %}">{{ directory.name }} </a><br><hr>
-		{% endfor %}
-		<br><br>
-
-		<h5>Files</h5>
-		{% for document in documents %}
-			{{ document.file.name }} <br>
-			<small><a href="{% url 'core:delete-document' document.pk %}">Delete</a></small>
-		{% endfor %}
-
-		<br><br>
-	  {% include 'core/create_dir_form.html' %}
-
-	  <br><br>
-	  {% include 'core/document_upload_form.html' %}
-
-	</div>
- -->

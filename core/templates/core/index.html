@@ -1,271 +1,138 @@
 {% extends 'core/base.html' %} {% block content %}
-<!-- log in form -->
-<!-- required bootstrap js -->
-<div class="Button">
-
-    <!-- folder list and file list here -->
-
-    <button class="btn btn-sm btn-outline-secondary " id="btn-list"><i class="fa fa-th-list fa-lg"></i>
-    </button>
-    <button class="btn btn-sm btn-outline-secondary outline-none active " id="btn-grid"><i class="fa fa-th-large fa-lg"></i>
-    </button>
-
-    <!-- end foler and  file list and blcok -->
-    <!-- Button to for create folder modal -->
-
-    <!-- uplaod -->
-    <button type="button" class="btn btn-outline-primary ml-5 btn1" data-toggle="modal" data-target="#myModal1">upload file
-  
-        <a href="#">
-            <i class="fa fa-upload"></i>
-        </a>
-      
- </button>
-
-    <!-- uplaod -->
-
-    <button type="button" class="btn btn-outline-primary  " data-toggle="modal" data-target="#exampleModal" id="logout">
-        <!-- <i class="fa fa-fw fa-sign-out">Logout</i> -->
-        Logout
-        <a href="#">
-            <i class="fa fa-clock-o" aria-hidden="true"></i>
-        </a>
-        <a href="#">
-            <img width="30" src="assets/avatar.svg" alt="" />
-            <!-- <i class="fa fa-user-circle-o" aria-hidden="true"></i> -->
-        </a>
-    </button>
 
 
+<section style="padding:8px 10px; background: #F8F8F8;; height:8vh; border-bottom: 1px solid brown; text-align: center; align-items: center;">
+    <div class="Button-nav ">
+        <!-- drop down menu -->
+        <div class="dropdown ">
+            <button  class="dropbtn  btn btn-outline-primary">{{ current_user_branch }}</button>
 
-    <hr style=" border: 1px solid rgb(218, 182, 182);">
-
-
-</div>
-<!-- end   button of index navbar here -->
-
-<!-- The Modal folder  -->
-
-
-
-<!-- logout modal  form here  -->
-
-<!-- Logout Modal-->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="{% url 'users:logout' %}">Logout</a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end modal  -->
-
-
-<!--============ end logout modal=============== -->
-
-<h1>{{ current_user_branch }}</h1><br>
-
-<div class="container">
-    <h3>Common Documents</h3>
-    <hr>
-    <!-- exel colum -->
-    <div class="row">
-        {% for document in common_documnts %}
-        <div class="col-2 col-md-3 col-xs-4 file-">
-            
-                <div class="card" style="width: 5rem; background: lightblue;    width: [object Object]px; 
-                    height: [object Object]px; 
-                    background: lightskyblue; 
-                    border: solid #BDBDBD 1px; 
-                    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
-                    -webkit-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
-                    -moz-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ">
-                    <a href="#" class="file-thamb">
-                    <i class="fa fa-file-excel-o" style="font-size:48px;color: white"></i>
-
-                    <small style="font-size: 12px; padding-top: 4px;">{{ document.file.name }}</small>
-                    <a href=""></a>
-
-                    <small style="font-size: 10px;">{{ document.updated_at }}</small>
-                    <hr>
-                    <small><a href="{% url 'core:delete-document' document.pk %}">Delete</a></small>
-                </div>
-            
         </div>
 
+        <!-- end the dropdown -->
 
-        {% endfor %}
+        <!-- start logout -->
 
 
+        <div class="dropdown" id="profile">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                {{ request.user.get_full_name }}<i class="fa fa-user fa-fw fa-2x"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                </li>
+                <li><a href="{% url 'users:change-password' %}"><i class="fa fa-gear fa-fw"></i> Change Password</a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="{% url 'users:logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
 
+        <!-- end log out -->
     </div>
-</div>
+
+
+    <!-- searchbar -->
+
+    <div class="search">
+        <input type="text" class="searchTerm" placeholder="What are you looking for?" id="myInput" onkeyup="searchFun()">
+        <button type="submit" class="searchButton">
+                 <i class="fa fa-search"></i>
+              </button>
+    </div>
+
+
+
+    <!--============ end logout modal=============== -->
+</section>
+
+
+<!-- ++++++++main-body-part++++++ -->
 
 
 <!-- folder all folder create here -->
-<div class="container content-wrapper ">
-    
-    <h5>Folders</h5>
-    <hr>
-    <div class="folder pt-2">
-        <div class="row ">
-        
-            <div class=" col-2 col-md-2 col-sm-4 col-xs-4">
+<div class="container content-wrapper  " style=" margin-top: 40px; width:100%; height: 100vh; overflow: scroll; ">
 
-                <a href="{%  url 'core:directory' root_dir.pk %}"><i class="fa fa-folder" style="font-size:48px;color:#ffcc66;    width: [object Object]px; 
-                    height: [object Object]px; 
-                    background: #F8F8F8; 
-                    border: solid #BDBDBD 1px; 
-                    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
-                    -webkit-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
-                    -moz-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  "></i>
-            <br><span>Root</span></a>
+    <h3>{{ current_path }}</h3>
+    <h5>{{ current_user_branch }} Branch</h5>
+    <hr>
+    <div class="folder pt-2" id="folder-file">
+        <div class="row  " id="row">
+            <div class=" col-2 col-md-2 col-sm-4 col-xs-4 mt-5" id="col">
+
+                <a href="{%  url 'core:directory' root_dir.pk %}"><i class="fa fa-folder" style="font-size:68px;color:#ffcc66;  "></i>
+            <br><span>{{ root_dir.name }}</span></a>
 
             </div>
 
         </div>
     </div>
+    <br>
+    <br>
+    <!--  file thumbnails here -->
+    <div class="container-file">
+        <h5> Common Files</h5>
+        <hr>
+        <!-- exel colum -->
+        <div class="row">
+            {% for document in common_documnts %}
+            <div class="col-2 col-md-3 col-xs-4 file-">
 
-</div>
-<br>
-<br>
-<!--  file thumbnails here -->
-<!-- <div class="container">
-    <h5>Files</h5>
-    <hr>
-    <div class="row">
-        {% for document in root_dir_documents %}
-        <div class="col-2 col-md-3 col-xs-4 file-">
-            
-                <div class="card" style="width: 5rem; background: lightblue;    width: [object Object]px; 
-                    height: [object Object]px; 
-                    background: lightskyblue; 
-                    border: solid #BDBDBD 1px; 
-                    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
-                    -webkit-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ; 
-                    -moz-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2)  ">
-                    <a href="#" class="file-thamb">
-                    <i class="fa fa-file-excel-o" style="font-size:48px;color: white"></i>
+                <div href="#" class="card file-thamb " style="width: 8rem; border: 1px solid black;  ">
+                    <i class="fa fa-file-excel-o" style="font-size:68px;color: brown;"></i>
 
-                    <small style="font-size: 12px; padding-top: 4px;">{{ document.file.name }}</small>
-                    <a href=""></a>
+                    <div class="f-name " style="  height: 30px width:200px;  overflow: scroll; font-size: 12px; padding: 5px 8px ; ">{{ document.updated_by.get_full_name }}</div>
+                    <a href="{{ document.file.url }}">
+                        <p class="title">{{ document.filename }} </p>
+                    </a>
 
                     <small style="font-size: 10px;">{{ document.updated_at }}</small>
-                    <hr>
+
                     <small><a href="{% url 'core:delete-document' document.pk %}">Delete</a></small>
                 </div>
-            
+
+            </div>
+
+
+
+            {% endfor %}
+
+
+
         </div>
-
-
-        {% endfor %}
-
-
-
     </div>
-</div> -->
 
 
-<!--  end  thumbnails---- -->
+
+    <!-- dropdown menu with click -->
+    <script>
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
 
 
-<!-- right click -->
-<div id="context-menu">
-    <a class="item">
-        <i class="fa fa-download"></i> download
-    </a>
-    <a class="item" data-toggle="modal" data-target="#myModal">
-        <i class="material-icons" style="font-size:15px">create_new_folder</i> create folder
-    </a>
-    <a class="item" data-toggle="modal" data-target="#myModal1">
-        <i class="fa fa-upload"></i>upload
-    </a>
-    <a class="item">
-        <i class="fa fa-trash-o"></i> Delete
-    </a>
-    <hr>
-    <a class="item">
-        <i class="fa fa-refresh"></i> Rename
-    </a>
-    <a class="item">
-        <i class="fa fa-times"></i> Exit
-    </a>
+        // searchbar filter here start
+
+        // end searchbar filter here
+    </script>
+    <!--  end dropdwon menu -->
+
 </div>
-
-
-<!--  folder  and file diplay block and  list here -->
-
-<!-- <script>
-    $(document).ready(function() {
-        // Grid or list selection
-        $("#btn-list").on("click", function() {
-            $("#main-folders").addClass("flex-column");
-            $("#btn-grid").removeClass("active");
-            $(this).addClass("active");
-        });
-        $("#btn-grid").on("click", function() {
-            $("#main-folders").removeClass("flex-column");
-            $("#btn-list").removeClass("active");
-            $(this).addClass("active");
-        });
-        $("#btn-list").on("click", function() {
-            $("#main-files").addClass("flex-column");
-            $("#btn-grid").removeClass("active");
-            $(this).addClass("active");
-        });
-        $("#btn-grid").on("click", function() {
-            $("#main-files").removeClass("flex-column");
-            $("#btn-list").removeClass("active");
-            $(this).addClass("active");
-        });
-
-        // Open folder and see files
-        $("button.folder-container").on("click", function() {
-            $("#filesGroup").removeClass("d-none");
-            $("#foldersGroup").addClass("d-none");
-        });
-        $("a#backToFolders").on("click", function() {
-            $("#foldersGroup").removeClass("d-none");
-            $("#filesGroup").addClass("d-none");
-        });
-    });
-</script> -->
-<!-- end  folder and  file display  block  and llist  -->
-
-
-<script>
-    // script for  on right clcik  button
-    window.addEventListener("contextmenu", function(event) {
-        event.preventDefault();
-        var contextElement = document.getElementById("context-menu");
-        contextElement.style.top = event.offsetY + "px";
-        contextElement.style.left = event.offsetX + "px";
-        contextElement.classList.add("active");
-    });
-    window.addEventListener("click", function() {
-        document.getElementById("context-menu").classList.remove("active");
-    });
-</script>
-
-<!-- foder file list block  js -->
-
-
-
-<!--  end floder llist and diplay block -->
-
-<!-- script for   draga and drop  dile here -->
-
-
+<!-- end body-conatiner -->
 
 
 {% endblock %}

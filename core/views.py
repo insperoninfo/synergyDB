@@ -115,6 +115,8 @@ def directoryContent(request, pk):
 	current_directory = Directory.objects.get(pk=pk)
 	current_user = request.user
 
+	print(current_user.get_full_name())
+
 	if current_directory.branch != current_user.profile.branch:
 		return HttpResponseForbidden('<h1>403 Forbidden</h1>')
 
@@ -136,6 +138,7 @@ def directoryContent(request, pk):
 			'create_dir_form' : create_dir_form,
 			'document_upload_form' : document_upload_form,
 			'current_path' : current_path,
+			'dir_update_form' : DirectoryCreationForm,
 		}	
 
 		return render(request, 'core/directory.html', context)	

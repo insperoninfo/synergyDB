@@ -83,7 +83,7 @@ body {
 .navbar {
     background: rgba(99, 107, 104, 0.3);
     grid-area: nav;
-    height: 35px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -140,13 +140,14 @@ body {
 main {
     background: #f3f4f6;
     grid-area: main;
-    text-align: center;
+    /* text-align: center; */
     overflow-y: auto;
+    /* height: 100vh; */
     /* padding: 10px 20px; */
-    border-bottom: 1px solid lightgray;
-    box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-    -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    /* border-bottom: 1px solid lightgray;
+    box-shadow: 2px 2px 9px 6px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 2px 2px 9px 6px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 2px 2px 9px 6px rgba(0, 0, 0, 0.75); */
 }
 
 .main__container {
@@ -177,93 +178,68 @@ main {
 }
 
 
-/* list and card view css here */
-
-.card-folders .card-body>.breadcrumb {
-    margin-left: -1.25em;
-    margin-right: -1.25em;
-    margin-top: -1.25em;
-    border-radius: 0;
-}
-
-.folder-container {
-    text-align: center;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-bottom: 1.5rem;
-    width: 100px;
-    padding: 0;
-    align-self: start;
-    background: none;
-    border: none;
-    outline-color: transparent !important;
-    cursor: pointer;
-}
-
-.folder-icon {
-    font-size: 3em;
-    line-height: 1.25em;
-}
-
-.folder-icon-color {
-    color: #FFC107;
-    text-shadow: 1px 1px 0px #e0a800;
-}
-
-.folder-name {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
-}
-
-.flex-column .folder-container {
-    display: flex;
-    width: auto;
-    min-width: 100px;
-    text-align: left;
-    margin: 0;
-    margin-bottom: 1rem;
-}
-
-.flex-column .folder-icon,
-.flex-column .folder-name {
-    display: inline-flex;
-}
-
-.flex-column .folder-icon {
-    font-size: 1.4em;
-    margin-right: 1rem;
-}
-
-.file-icon-color {
-    color: #999;
-}
-
-
-/* end list and  card vie here */
-
-
 /* ==== start login form====- */
 
-.Button {
-    /* display: flex;
-    flex-direction: row; */
-    /* padding: 0px 20px; */
+.Button-nav {
     display: inline;
-    /* background-color: lightcyan; */
-    /* border-bottom: 1px solid lightgray; */
+    background-color: lightcyan;
+    border-bottom: 1px solid lightgray;
     text-align: center;
     align-items: center;
-    ;
 }
 
-.Button .btn-outline-secondary {
+.Button-nav .dropdown {
     float: left;
-    margin-left: 5px;
+}
+
+
+/* start dropdwon menu */
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 140px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 5px 10px;
+    text-decoration: none;
+    display: block;
+    border-bottom: 1px solid black;
+}
+
+.dropdown a:hover {
+    background-color: #ddd;
+}
+
+.show {
+    display: block;
+}
+
+
+/* end dropdown  */
+
+.Button-nav .btn-outline-secondary {
+    float: left;
+}
+
+.Button-nav .btn-outline-primary {
+    float: left;
+    margin-left: 10px;
 }
 
 .btn {
-    margin-top: 10px;
+    margin-top: 0px;
     padding: 5px 4px;
     color: #171d1a;
     font-family: 'Cardo', serif;
@@ -271,9 +247,19 @@ main {
     /* font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
 }
 
-#logout {
+.Button-nav #profile {
+    float: right;
+    margin-right: 40px;
+}
+
+#btn-list {
     float: right;
     margin-right: 20px;
+}
+
+#btn-grid {
+    float: right;
+    /* margin-right: 10px; */
 }
 
 
@@ -326,17 +312,6 @@ main {
         opacity: 1
     }
 }
-
-
-/* end the file uplaod modal box her */
-
-.folder .row .col-2:hover {
-    background-color: lightblue;
-    opacity: 0.5;
-}
-
-
-/* end uplaod button */
 
 
 /* side nabar form here */
@@ -517,63 +492,90 @@ main {
 /* end  */
 
 
-/* file thaumbnails */
+/* searchbar */
 
-.file-thamb {
-    /* background: lightblue; */
-    box-shadow: -7px 2px 9px -2px rgba(0, 0, 0, 0.75);
-    -webkit-box-shadow: -7px 2px 9px -2px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: -7px 2px 9px -2px rgba(0, 0, 0, 0.75);
-}
-
-
-}
-.file-thamb:hover {
-    background-color: black;
-    opacity: o.5;
-}
-.row .file-thumbnails .card {
-    width: 5rem;
-    background: lightblue;
-    box-shadow: -7px 2px 9px -2px rgba(0, 0, 0, 0.75);
-    -webkit-box-shadow: -7px 2px 9px -2px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: -7px 2px 9px -2px rgba(0, 0, 0, 0.75);
+.search {
+    padding-left: 40px;
+    width: 450px;
+    /* position: relative; */
+    display: flex;
 }
 
-/*  end the  file thumbils */
-
-/* start content menu on right click */
-#context-menu {
-    display: block;
-    position: fixed;
-    z-index: 10000;
-    width: 180px;
-    background: #1b1a1a;
-    border-radius: 5px;
-    transform: scale(0);
-    /* transform-origin: top left; */
-}
-#context-menu.active {
-    transform: scale(1);
-    transition: transform 300ms ease-in-out;
-}
-#context-menu .item {
-    padding: 5px 5px;
-    font-size: 15px;
-    color: #eee;
-    display: block;
-    border-bottom: 1px solid bisque;
-}
-#context-menu .item:hover {
-    background: #555;
-}
-#context-menu .item i {
-    display: inline-block;
-    margin-right: 5px;
-}
-#context-menu hr {
-    margin: 2px 0px;
-    border-color: #555;
+.searchbar {
+    width: 450px;
+    border: 3px solid #00B4CC;
+    border-right: none;
+    padding: 5px;
+    height: 37px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: #9DBFAF;
 }
 
-/* end the content menu on right clcik */
+.searchbar:focus {
+    color: #00B4CC;
+}
+
+.searchButton {
+    width: 40px;
+    height: 36px;
+    border: 1px solid #00B4CC;
+    background: #00B4CC;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+
+/*Resize the wrap to see the search bar change!*/
+
+
+/* end searchbar */
+
+
+/* drag and drop when upload */
+
+form #id_file {
+    width: 100%;
+    height: 30vh;
+    border: 1px dashed brown;
+}
+
+
+/* end drag and drop when upload */
+
+
+/* main-body */
+
+.content-wrapper {
+    text-align: center;
+    text-align: center;
+}
+
+
+/* end main-body */
+
+
+/* usercareform start */
+
+#user-create P {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+p #id_groups {
+    width: 100px;
+    height: 50px;
+    margin-left: 100px;
+}
+
+p small {
+    padding-top: 5px;
+}
+
+
+/* end usercreate form */

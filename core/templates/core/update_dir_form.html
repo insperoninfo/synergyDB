@@ -1,11 +1,11 @@
 
 	
 <div class="flup">
-	<form method="post" enctype="multipart/form-data">
+	<form method="post" action = "{% url 'core:update-directory' current_directory.pk %}" enctype="multipart/form-data">
 			{% csrf_token %}
-	  		<h5>Folder Name:</h5><br>
+	  		<h5>Rename Directory:</h5><br>
 	  		
-	  {{ form.as_p }}
+	  {{ dir_update_form.as_p }}
 	  
 	  <button type="submit">Update</button>
 	</form>
