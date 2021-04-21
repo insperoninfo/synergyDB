@@ -3,7 +3,7 @@ import os
 
 
 def check_if_file_exists(directory, file):
-	file_path = os.path.join(directory.str(), file.name)
+	file_path = os.path.join(directory.upload_path(), file.name)
 	print(file_path)
 	docs = Document.objects.filter(directory=directory).filter(file=file_path)
 	

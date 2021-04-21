@@ -75,29 +75,29 @@ def uploadDocument(request, pk):
 			return redirect('core:index')
 
 		else:
-			# try:
-			form = DocumentUploadForm(request.POST, request.FILES)
-			if form.is_valid():
-				filelist = request.FILES.getlist('file')
-				for file in filelist:
-					# check if file already exists
-					if (check_if_file_exists(parent_directory, file)) == True:
-						file_path = os.path.join(parent_directory.str(), file.name)
+			try:
+				form = DocumentUploadForm(request.POST, request.FILES)
+				if form.is_valid():
+					filelist = request.FILES.getlist('file')
+					for file in filelist:
+						# check if file already exists
+						if (check_if_file_exists(parent_directory, file)) == True:
+							file_path = os.path.join(parent_directory.upload_path(), file.name)
 
 
-						doc = Document.objects.get(directory=parent_directory, file = file_path)
-						doc.file = file
-						doc.updated_by = created_by
-						doc.save()
-					else:
-						document_instance = Document(directory=parent_directory, file = file, updated_by=created_by)
-				
-						document_instance.save()
+							doc = Document.objects.get(directory=parent_directory, file = file_path)
+							doc.file = file
+							doc.updated_by = created_by
+							doc.save()
+						else:
+							document_instance = Document(directory=parent_directory, file = file, updated_by=created_by)
+					
+							document_instance.save()
 
-				return redirect('core:directory', pk=pk)
+					return redirect('core:directory', pk=pk)
 
-			# except:
-			# 	return HttpResponse('Some error occured!!')
+			except:
+				return HttpResponse('Some error occured!!')
 
 
 	# For development process only. Change to error msg on production.
@@ -122,7 +122,7 @@ def directoryContent(request, pk):
 		child_directories = Directory.objects.filter(parent_directory=current_directory)
 		documents = Document.objects.filter(directory = current_directory)
 
-		current_path = current_directory.str()
+		current_path = current_directory.str_()
 
 
 		create_dir_form = DirectoryCreationForm()
