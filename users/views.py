@@ -8,6 +8,7 @@ from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from core.decorators import allowed_users
 from django.http import HttpResponseForbidden
+from django.utils.decorators import method_decorator
 
 
 user_admin_required = user_passes_test(lambda user: user.is_superuser, login_url=r'users/accounts/login')
@@ -44,7 +45,8 @@ def createUser(request):
     return render(request, r'users/createUser.html', {'form': form})
 
 
-class ProfileUpdateView(AdminRequiredMixin, UpdateView):
+@method_decorator(allowed_users(allowed_roles=['admin']), name='dispatch')
+class ProfileUpdateView(UpdateView):
 	model = Profile
 	fields = ['branch', 'phone', 'address', 'gender']
 	template_name = 'users/update_profile.html'

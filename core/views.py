@@ -14,20 +14,25 @@ from .check_file import check_if_file_exists
 
 @login_required
 def index(request):
-	current_user = request.user
-	current_user_branch = current_user.profile.branch
+	try:
+		current_user = request.user
+		current_user_branch = current_user.profile.branch
 
-	common_documnts = CommonDocument.objects.filter()
+		common_documnts = CommonDocument.objects.filter()
 
-	root_dir = Directory.objects.filter(name='root').filter(branch = current_user_branch)
+		root_dir = Directory.objects.filter(name='root').filter(branch = current_user_branch)
 
-	context = {
-		'current_user' : current_user,
-		'current_user_branch' : current_user_branch,
-		'root_dir' : root_dir[0],
-		'common_documnts' : common_documnts,
+		context = {
+			'current_user' : current_user,
+			'current_user_branch' : current_user_branch,
+			'root_dir' : root_dir[0],
+			'common_documnts' : common_documnts,
 
-	}
+		}
+
+	except (IndexError) as e:
+            return HttpResponse('/404')
+
 
 	return render(request, 'core/index.html', context)
 
