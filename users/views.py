@@ -69,3 +69,8 @@ def changePassword(request):
     return render(request, 'users/change_password.html', {
         'form': form
     })
+
+
+@login_required
+def userProfile(request):
+    return render(request, 'users/userProfile.html')
