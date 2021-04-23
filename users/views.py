@@ -73,4 +73,9 @@ def changePassword(request):
 
 @login_required
 def userProfile(request):
-    return render(request, 'users/userProfile.html')
+    user = request.user
+
+    context = {
+        'user' : user,
+    }
+    return render(request, 'users/userProfile.html', context)

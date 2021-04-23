@@ -58,23 +58,60 @@
             <div class="sidebar__menu">
                 <div class="sidebar__link active_menu_link">
                     <i class="fa fa-dashboard"></i>
-                    <a href="#">Dashboard</a>
+                    <a href="{% url 'core:index' %}">Dashboard</a>
                 </div>
                 <hr>
                 <!-- <div class="sidebar__link">
                     <i class="fa fa-user-secret" aria-hidden="true"></i>
                     <a href="#">Synergy-info</a>
                 </div> -->
-                <div class="sidebar__link">
+                
+
+
+                <!-- drop down  admin create -->
+                <div class="dropdown sidebar__link p-2">
                     <i class="fa fa-building-o"></i>
-                    <a href="#">Public-folder</a>
+                    <a href="{% url 'core:common-documents' %}">Public Documents</a>
                 </div>
+
+                    
+
+                <!-- drop down -->
+                <div class="dropdown sidebar__link p-2">
+                    <i class="fa fa-user-secret" aria-hidden="true"></i>
+                    <a class=" dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        User
+                    </a>
+
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a>
+                        <a class="dropdown-item" href="{% url 'users:change-password' %}">Change Password</a>
+                        
+                    </div>
+                </div>
+                <!-- end drop down maneu -->
+
                 {% if request.user|has_group:"admin" %}
+                    <div class="dropdown sidebar__link p-2">
+                    <i class="fa fa-user-secret" aria-hidden="true"></i>
+                    <a class=" dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin
+                    </a>
+
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'users:create-user' %}">Create User</a>
+                        <!-- <a class="dropdown-item" href="#!">Something</a>  -->
+                    </div>
+                </div>
+                {% endif %}
+                <!-- end drop  dowewn for admin -->
+               
+                <!-- {% if request.user|has_group:"admin" %}
                 <div class="sidebar__link">
                     <i class="fa fa-wrench"></i>
                     <a href="#">Setting</a>
                 </div>
-                {% endif %}
+                {% endif %} -->
 
             </div>
         </div>

@@ -211,6 +211,18 @@ class DocumentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 		return reverse('core:directory', kwargs = {'pk' : parent_dir_pk})
 
 
+def commonDocumentView(request):
+	common_documnts = CommonDocument.objects.filter()
+
+	form = CommonDocumentUploadForm()
+
+	context = {
+		'common_documnts' : common_documnts,
+		'document_upload_form' : form,
+	}
+
+	return render(request, 'core/common_documnts.html', context)
+
 
 @allowed_users(allowed_roles=['admin'])
 def uploadCommonDocuments(request):

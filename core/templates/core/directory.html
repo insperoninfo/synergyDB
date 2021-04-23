@@ -13,14 +13,13 @@
 
             <div id="myDropdown" class="dropdown-content">
 
-                <a class="item">
-                    <i class="fa fa-download"> download</i>
-                </a>
-                <a class="item" data-toggle="modal" data-target="#myModal">
-                    <i class="material-icons" style="font-size:15px">create_new_folder</i> Create Directory
-                </a>
+                
                 <a class="item" data-toggle="modal" data-target="#myModal1">
                     <i class="fa fa-upload">Upload Files</i>
+                </a>
+                {% if request.user|has_group:"admin" %}
+                <a class="item" data-toggle="modal" data-target="#myModal">
+                    <i class="material-icons" style="font-size:15px">create_new_folder</i> Create Directory
                 </a>
 
                 <a class="item" data-toggle="modal" data-target="#updateModel">
@@ -29,6 +28,7 @@
                 <a class="item" data-toggle="modal" data-target="#deleteModel">
                     <i class="fa fa-trash-o"> Delete</i>
                 </a>
+                {% endif %}
             </div>
         </div>
 
