@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseForbidden
 from users.views import AdminRequiredMixin
 from .check_file import check_if_file_exists
+from django.core.paginator import Paginator
 
 
 @login_required
@@ -212,9 +213,20 @@ class DocumentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 def commonDocumentView(request):
-	common_documnts = CommonDocument.objects.filter()
+	common_documnts_list = CommonDocument.objects.filter()
 
 	form = CommonDocumentUploadForm()
+
+	paginator = Paginator(common_documnts_list, 2)
+
+	page = request.GET.get('page', 1)
+
+	try:
+		common_documnts = paginator.page(page)
+	except PageNotAnInteger:
+		common_documnts = paginator.page(1)
+	except EmptyPage:
+		common_documnts = paginator.page(paginator.num_pages)
 
 	context = {
 		'common_documnts' : common_documnts,
@@ -240,7 +252,7 @@ def uploadCommonDocuments(request):
 				
 					document_instance.save()
 
-				return redirect('core:index')
+				return redirect('core:common-documents')
 
 		except:
 			return HttpResponse('Some error occured!!')

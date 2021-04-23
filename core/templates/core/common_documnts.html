@@ -47,7 +47,8 @@
     <!-- searchbar -->
 
     <div class="search">
-        <input type="text" class="searchTerm" placeholder="What are you looking for?" id="myInput" onkeyup="searchFun()">
+        <!-- <input type="text" class="searchTerm" placeholder="What are you looking for?" id="myInput" onkeyup="searchFun()"> -->
+        <input class="searchbar" type="text" onkeyup="filter()" placeholder="Search.." name="search">
         <button type="submit" class="searchButton">
                  <i class="fa fa-search"></i>
               </button>
@@ -97,9 +98,27 @@
             {% endfor %}
 
 
-
         </div>
     </div>
+    <br><br>
+    <div class="pagination">
+                <span class="step-links">
+                    {% if common_documnts.has_previous %}          
+                        <a href="?page={{ common_documnts.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                      {{ common_documnts.number }}
+                    </span>
+
+                    {% if common_documnts.has_next %}
+                        <a href="?page={{ common_documnts.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+    </div>
+
+
+
 
      <div class="modal" id="myModal1">
         <div class="modal-dialog modal-lg">
@@ -145,6 +164,18 @@
 
 
         // searchbar filter here start
+
+        function filter() {
+            let input = document.querySelector('.searchbar').value //<-- Changed to querySelector
+            input = input.toLowerCase();
+            let cards = document.querySelectorAll('.card'); //<-- Changed to querySelectorAll with '.card' selector.
+
+            //loop over cards and compare search with title.
+            cards.forEach((el) => {
+                let title = el.querySelector('.title').textContent.toLowerCase();
+                el.style.display = title.includes(input) ? "list-item " : "none ";
+            });
+        }
 
         // end searchbar filter here
     </script>
