@@ -87,7 +87,7 @@
                     <small style="font-size: 10px;">{{ document.updated_at }}</small>
 
                     {% if request.user|has_group:"admin" %}
-                    	<small><a href="{% url 'core:delete-document' document.pk %}">Delete</a></small>
+                    	<small><a href="{% url 'core:delete-common-document' document.pk %}">Delete</a></small>
                     {% endif %}
                 </div>
 
