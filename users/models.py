@@ -19,7 +19,7 @@ class Profile(models.Model):
     address = models.CharField(max_length=30, blank=True)
     gender = models.CharField(max_length=15, choices=GENDER_CHOICES)
     branch = models.CharField(max_length=50, choices=BRANCH_CHOICES)
-    phone = models.PositiveIntegerField(null= True, blank=True)
+    phone = models.BigIntegerField(null= True, blank=True)
 
 
     def __str__(self):

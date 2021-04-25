@@ -33,8 +33,10 @@ class AdminRequiredMixin(object):
 def createUser(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
+        print(form)
         if form.is_valid():
             form.save()
+            form.save_m2m()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
