@@ -30,10 +30,7 @@
                 {{ request.user.get_full_name }}<i class="fa fa-user fa-fw fa-2x"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                </li>
-                <li><a href="{% url 'users:change-password' %}"><i class="fa fa-gear fa-fw"></i> Change Password</a>
-                </li>
+                
                 <li class="divider"></li>
                 <li><a href="{% url 'users:logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
@@ -61,6 +58,8 @@
 
 
 <!-- ++++++++main-body-part++++++ -->
+
+<button class="m-2" onclick="goBack()"  style=" font-size: 12px; padding: 2px 4px; ">&larr; Back</button>
 
 
 <!-- folder all folder create here -->
@@ -175,6 +174,10 @@
                 let title = el.querySelector('.title').textContent.toLowerCase();
                 el.style.display = title.includes(input) ? "list-item " : "none ";
             });
+        }
+
+        function goBack() {
+            window.history.back();
         }
 
         // end searchbar filter here

@@ -1,4 +1,7 @@
-{% extends 'core/base.html' %} {% block content %}
+{% extends 'core/base.html' %} 
+{% load custom_tags %}
+
+{% block content %}
 
 
 <section style="padding:8px 10px; background: #F8F8F8;; height:8vh; border-bottom: 1px solid brown; text-align: center; align-items: center;">
@@ -19,11 +22,6 @@
                 {{ request.user.get_full_name }}<i class="fa fa-user fa-fw fa-2x"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                </li>
-                <li><a href="{% url 'users:change-password' %}"><i class="fa fa-gear fa-fw"></i> Change Password</a>
-                </li>
-                <li class="divider"></li>
                 <li><a href="{% url 'users:logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
             </ul>
@@ -36,12 +34,12 @@
     <!-- searchbar -->
 
     <div class="search">
-        <input type="text" class="searchTerm" placeholder="What are you looking for?" id="myInput" onkeyup="searchFun()">
+        <!-- <input type="text" class="searchTerm" placeholder="What are you looking for?" id="myInput" onkeyup="searchFun()"> -->
+        <input class="searchbar" type="text" onkeyup="filter()" placeholder="Search.." name="search">
         <button type="submit" class="searchButton">
                  <i class="fa fa-search"></i>
               </button>
     </div>
-
 
 
     <!--============ end logout modal=============== -->
@@ -88,8 +86,9 @@
                     </a>
 
                     <small style="font-size: 10px;">{{ document.updated_at }}</small>
-
+                    {% if request.user|has_group:"admin" %}
                     <small><a href="{% url 'core:delete-common-document' document.pk %}">Delete</a></small>
+                    {% endif %}
                 </div>
 
             </div>
@@ -122,6 +121,18 @@
                     }
                 }
             }
+        }
+
+        function filter() {
+            let input = document.querySelector('.searchbar').value //<-- Changed to querySelector
+            input = input.toLowerCase();
+            let cards = document.querySelectorAll('.card'); //<-- Changed to querySelectorAll with '.card' selector.
+
+            //loop over cards and compare search with title.
+            cards.forEach((el) => {
+                let title = el.querySelector('.title').textContent.toLowerCase();
+                el.style.display = title.includes(input) ? "list-item " : "none ";
+            });
         }
 
 

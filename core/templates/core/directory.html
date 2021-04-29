@@ -62,13 +62,9 @@
 
         <div class="dropdown" id="profile">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-user fa-fw fa-2x"></i>
+                {{ request.user.get_full_name }}<i class="fa fa-user fa-fw fa-2x"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                </li>
-                <li><a href="{% url 'users:change-password' %}"><i class="fa fa-gear fa-fw"></i> Change Password</a>
-                </li>
                 <li class="divider"></li>
                 <li><a href="{% url 'users:logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
@@ -79,14 +75,7 @@
 
         <!-- end logout here -->
 
-        <!-- folder list and file list here -->
-
-        <button class="btn btn-sm btn-outline-secondary " id="btn-list"><i class="fa fa-th-list fa-lg"></i>
-        </button>
-        <button class="btn btn-sm btn-outline-secondary outline-none active " id="btn-grid"><i class="fa fa-th-large fa-lg"></i>
-        </button>
-
-        <!-- end foler and  file list and blcok -->
+       
 
 
 
@@ -241,6 +230,7 @@
 
 <!-- ++++++++main-body-part++++++ -->
 
+<button class="m-2" onclick="goBack()"  style=" font-size: 12px; padding: 2px 4px; ">&larr; Back</button>
 
 <!-- folder all folder create here -->
 <div class="container content-wrapper  " style=" margin-top: 40px; width:100%; height: 100vh; overflow: scroll; ">
@@ -337,6 +327,9 @@
             });
         }
 
+        function goBack() {
+            window.history.back();
+        }
 
         // end searchbar filter here
     </script>

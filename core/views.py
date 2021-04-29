@@ -11,6 +11,7 @@ from django.http import HttpResponseForbidden
 from users.views import AdminRequiredMixin
 from .check_file import check_if_file_exists
 from django.core.paginator import Paginator
+from django.utils.decorators import method_decorator
 
 
 @login_required
@@ -18,6 +19,7 @@ def index(request):
 	try:
 		current_user = request.user
 		current_user_branch = current_user.profile.branch
+
 
 		common_documnts = CommonDocument.objects.filter()
 
@@ -46,7 +48,7 @@ def createDirectory(request,pk):
 		parent_directory = Directory.objects.get(pk = pk)
 		branch = parent_directory.branch
 
-		if created_by.profile.branch != branch or created_by.is_superuser == False:
+		if created_by.profile.branch != branch or created_by.groups.filter(name='admin').exists() != True:
 			return HttpResponseForbidden('<h1>403 Forbidden</h1>') 
 
 		else:
@@ -217,7 +219,7 @@ def commonDocumentView(request):
 
 	form = CommonDocumentUploadForm()
 
-	paginator = Paginator(common_documnts_list, 2)
+	paginator = Paginator(common_documnts_list, 4)
 
 	page = request.GET.get('page', 1)
 
@@ -267,7 +269,8 @@ def uploadCommonDocuments(request):
 
 
 
-class CommonDocumentDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
+@method_decorator(allowed_users(allowed_roles=['admin']), name='dispatch')
+class CommonDocumentDeleteView(LoginRequiredMixin, DeleteView):
 	model = CommonDocument
 	template_name = 'core/document_delete_confirmation.html'
 	success_url = '/'

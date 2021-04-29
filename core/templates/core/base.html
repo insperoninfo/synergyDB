@@ -49,8 +49,8 @@
         <div id="sidebar">
             <div class="sidebar__title">
                 <div class="sidebar__img">
-                    <img src="assets/logo.png">
-                    <h1>synergy-management</h1>
+                    <img src="{% static 'core/images/synergy.png'  %}">
+                   &nbsp; &nbsp; <strong>Synergy Management</strong>
                 </div>
                 <i onclick="closeSidebar()" class="fa fa-times" id="sidebarIcon" aria-hidden="true"></i>
             </div>
@@ -76,20 +76,11 @@
 
                     
 
-                <!-- drop down -->
                 <div class="dropdown sidebar__link p-2">
                     <i class="fa fa-user-secret" aria-hidden="true"></i>
-                    <a class=" dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        User
-                    </a>
 
-                    <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a>
-                        <a class="dropdown-item" href="{% url 'users:change-password' %}">Change Password</a>
-                        
-                    </div>
+                    <a href="{% url 'users:profile' %}">Profile</a>
                 </div>
-                <!-- end drop down maneu -->
 
                 {% if request.user|has_group:"admin" %}
                     <div class="dropdown sidebar__link p-2">
@@ -105,6 +96,23 @@
                 </div>
                 {% endif %}
                 <!-- end drop  dowewn for admin -->
+
+
+
+                <!-- drop down -->
+                <div class="dropdown sidebar__link p-2">
+                    <i class="fa fa-building-o"></i>
+                    <a class=" dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Setting
+                    </a>
+
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenuLink">
+                        <!-- <a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a> -->
+                        <a class="dropdown-item" href="{% url 'users:change-password' %}">Change Password</a>
+
+                    </div>
+                </div>
+                <!-- end drop down maneu -->
                
                 <!-- {% if request.user|has_group:"admin" %}
                 <div class="sidebar__link">
