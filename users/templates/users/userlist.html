@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %} 
+
+
+{% block content %}
+
+		<div style="margin-left: 20%; margin-right: 20%; text-align: center">
+			{% if messages %}
+       			{% for message in messages %}
+
+     				<div class="alert alert-{{ message.tags }}">
+         				{{ message }}
+					</div>
+
+         		{% endfor %}
+        	{% endif %}
+		</div>
+
+	{% for user in user_list %}
+
+		<strong>@{{ user.username }}</strong>&nbsp;&nbsp; &nbsp; &nbsp; {{ user.get_full_name }}
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ user.profile.branch }}
+		&nbsp;&nbsp;<a type="button" href="{% url 'users:update-user' user.pk %}" class="btn btn-primary btn-sm">Update</a>
+		&nbsp;&nbsp; <a type="button" href="{% url 'users:delete-user' user.pk %}" class="btn btn-danger btn-sm">Delete</a>
+		<br><br>
+	{% endfor %}
+
+
+{% endblock %}
