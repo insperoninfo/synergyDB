@@ -12,6 +12,7 @@ from .views import (
 				commonDocumentView,
 				dirAccess,
 				DirAccessDeleteView,
+				accessList,
 			)
 
 app_name = 'core'
@@ -29,4 +30,5 @@ urlpatterns = [
 	path('common-documents', commonDocumentView, name='common-documents'),
 	path('dir-access/<int:pk>', dirAccess, name='dir-access'),
 	path('dir-access-remove/<int:pk>', DirAccessDeleteView.as_view(), name='dir-access-remove'),
+	path('access-list/<int:pk>', accessList, name='access-list'),
 ]

@@ -1,7 +1,7 @@
 
 	
 <div class="">
-	<form method="post"  enctype="multipart/form-data">
+	<form method="post" action="{% url 'core:dir-access' current_directory.pk %}"  enctype="multipart/form-data">
 			{% csrf_token %}
 	  		<h5>Folder Access</h5><br>
 	  		

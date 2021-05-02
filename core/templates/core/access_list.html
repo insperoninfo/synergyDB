@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %} 
+{% load custom_tags %}
+
+{% block content %}
+	<br>
+	<h3>Users with access to {{ directory.name }} folder</h3>
+<br>
+    {% for access in access_list %}
+
+        @{{ access.user.username }} - {{ access.user.get_full_name }} &nbsp; &nbsp; <a type="button" class="btn btn-danger btn-sm" href="{% url 'core:dir-access-remove' access.pk %}">Remove Access</a> <br><br>
+
+    {% endfor %}
+
+{% endblock %}

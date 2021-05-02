@@ -350,5 +350,18 @@ class DirAccessDeleteView(LoginRequiredMixin, DeleteView):
 	
 	def get_success_url(self):
 		dir_access = DirectoryAccess.objects.get(pk = self.kwargs['pk'])
-		return reverse('core:directory', kwargs = {'pk' : dir_access.directory.pk})
+		return reverse('core:access-list', kwargs = {'pk' : dir_access.directory.pk})
 
+
+@allowed_users(allowed_roles=['admin'])
+def accessList(request, pk):
+	directory = Directory.objects.get(pk=pk)
+
+	access_list = DirectoryAccess.objects.filter(directory = directory)
+
+	context = {
+		'directory' : directory,
+		'access_list' : access_list,
+	}
+
+	return render(request, 'core/access_list.html', context)

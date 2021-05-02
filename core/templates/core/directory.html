@@ -29,7 +29,10 @@
                     <i class="fa fa-trash-o"> Delete</i>
                 </a>
                 <a class="item" data-toggle="modal" data-target="#accessModel">
-                    <i class="fa fa-trash-o"> Give Access</i>
+                    <i class="fa fa-lock"> Give Access</i>
+                </a>
+                <a href="{% url 'core:access-list' current_directory.pk %}">
+                    <i class="fa fa-list"> Access List</i>
                 </a>
                 {% endif %}
             </div>
