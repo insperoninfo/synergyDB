@@ -23,7 +23,7 @@ def get_upload_path(instance, filename):
 class Directory(models.Model):
 	name = models.CharField(max_length=256)
 	parent_directory = models.ForeignKey('self', blank=True, null=True,  on_delete = models.CASCADE)
-	branch = models.CharField(max_length=64, choices=BRANCH_CHOICES)
+	branch = models.CharField(max_length=56, choices=BRANCH_CHOICES)
 	created_at = models.DateTimeField(auto_now_add = True)
 	updated_at = models.DateTimeField(auto_now = True)
 	updated_by = models.ForeignKey(User, null=True, on_delete = models.SET_NULL)
