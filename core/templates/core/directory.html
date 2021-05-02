@@ -17,7 +17,7 @@
                 <a class="item" data-toggle="modal" data-target="#myModal1">
                     <i class="fa fa-upload">Upload Files</i>
                 </a>
-                {% if request.user|has_group:"admin" %}
+                {% if request.user|has_group:"admin" or request.user.is_superuser and current_directory.parent_directory != None %}
                 <a class="item" data-toggle="modal" data-target="#myModal">
                     <i class="material-icons" style="font-size:15px">create_new_folder</i> Create Directory
                 </a>
@@ -28,6 +28,9 @@
                 <a class="item" data-toggle="modal" data-target="#deleteModel">
                     <i class="fa fa-trash-o"> Delete</i>
                 </a>
+                <a class="item" data-toggle="modal" data-target="#accessModel">
+                    <i class="fa fa-trash-o"> Give Access</i>
+                </a>
                 {% endif %}
             </div>
         </div>
@@ -35,7 +38,7 @@
         <!-- end the dropdown -->
 
         <!-- Button to for create folder modal -->
-        {% if request.user|has_group:"admin" %}
+        {% if request.user|has_group:"admin" or request.user.is_superuser  %}
         <button type="button" class="btn btn-outline-primary  btn1" data-toggle="modal" data-target="#myModal">
 
          Create Directory 
@@ -46,14 +49,15 @@
      </button>
      {% endif %}
         <!-- uplaod -->
+        {% if current_directory.parent_directory != None and current_directory.name != 'root' %}
         <button type="button" class="btn btn-outline-primary " data-toggle="modal" data-target="#myModal1">Upload File
   
-        <a href="#">
-            <i class="fa fa-upload"></i>
-        </a>
-      
-      </button>
-
+            <a href="#">
+                <i class="fa fa-upload"></i>
+            </a>
+          
+          </button>
+      {% endif %}
         <!--end uplaod -->
 
 
@@ -198,6 +202,27 @@
     </div>
 
     <!--  end upload button modal -->
+
+    <div class="modal" id="accessModel">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Select user to procide access.</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    {% include 'core/dir_access.html' %}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
     <!-- logout modal  form here  -->

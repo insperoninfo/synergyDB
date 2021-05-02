@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse, reverse
 from .decorators import allowed_users
 import os
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import Directory, Document, CommonDocument, DirectoryAccess
 from .forms import DirectoryCreationForm, DocumentUploadForm, CommonDocumentUploadForm, DirAccessForm
@@ -23,12 +24,12 @@ def index(request):
 
 		common_documnts = CommonDocument.objects.filter()
 
-		root_dir = Directory.objects.filter(name='root').filter(branch = current_user_branch)
+		root_dirs = Directory.objects.filter(name='root').filter(parent_directory=None)
 
 		context = {
 			'current_user' : current_user,
 			'current_user_branch' : current_user_branch,
-			'root_dir' : root_dir[0],
+			'root_dirs' : root_dirs,
 			'common_documnts' : common_documnts,
 
 		}
@@ -48,7 +49,7 @@ def createDirectory(request,pk):
 		parent_directory = Directory.objects.get(pk = pk)
 		branch = parent_directory.branch
 
-		if created_by.profile.branch != branch or created_by.groups.filter(name='admin').exists() != True:
+		if created_by.groups.filter(name='admin').exists() != True:
 			return HttpResponseForbidden('<h1>403 Forbidden</h1>') 
 
 		else:
@@ -77,12 +78,12 @@ def uploadDocument(request, pk):
 		created_by = request.user
 		parent_directory = Directory.objects.get(pk = pk)
 		branch = parent_directory.branch
+		dirAccess = DirectoryAccess.objects.filter(directory=parent_directory).filter(user=created_by).exists()
 
-		if created_by.profile.branch != branch:
-			messages.warning(request, 'You are not authorized to perform the action.')
-			return redirect('core:index')
+		if (parent_directory.name == 'root' and parent_directory.parent_directory == None):
+			return HttpResponseForbidden('<h1>403 Forbidden</h1>')
 
-		else:
+		elif dirAccess == True or created_by.groups.filter(name='admin').exists() == True:
 			try:
 				form = DocumentUploadForm(request.POST, request.FILES)
 				if form.is_valid():
@@ -107,6 +108,9 @@ def uploadDocument(request, pk):
 			except:
 				return HttpResponse('Some error occured!!')
 
+		else:
+			return HttpResponseForbidden('<h1>403 Forbidden</h1>')
+
 
 	# For development process only. Change to error msg on production.
 	context = {
@@ -122,13 +126,10 @@ def uploadDocument(request, pk):
 def directoryContent(request, pk):
 	current_directory = Directory.objects.get(pk=pk)
 	current_user = request.user
+	dirAccess = DirectoryAccess.objects.filter(directory=current_directory).filter(user=current_user).exists()
 
-	print(current_user.get_full_name())
 
-	if current_directory.branch != current_user.profile.branch:
-		return HttpResponseForbidden('<h1>403 Forbidden</h1>')
-
-	else:
+	if (current_user.groups.filter(name='admin').exists() == True) or current_user.is_superuser:
 		child_directories = Directory.objects.filter(parent_directory=current_directory)
 		documents = Document.objects.filter(directory = current_directory)
 
@@ -137,6 +138,7 @@ def directoryContent(request, pk):
 
 		create_dir_form = DirectoryCreationForm()
 		document_upload_form = DocumentUploadForm()
+		dir_access_form = DirAccessForm()
 
 		context = {
 			'current_directory' : current_directory,
@@ -147,11 +149,44 @@ def directoryContent(request, pk):
 			'document_upload_form' : document_upload_form,
 			'current_path' : current_path,
 			'dir_update_form' : DirectoryCreationForm,
+			'dir_access_form' : dir_access_form,
+		}	
+
+		return render(request, 'core/directory.html', context)
+
+
+	
+
+	elif (dirAccess == True or (current_directory.name == 'root' and current_directory.parent_directory == None)):
+		child_directories = Directory.objects.filter(parent_directory=current_directory).filter(directoryaccess__user=current_user)
+		documents = Document.objects.filter(directory = current_directory)
+
+		current_path = current_directory.str_()
+
+
+		create_dir_form = DirectoryCreationForm()
+		document_upload_form = DocumentUploadForm()
+		dir_access_form = DirAccessForm()
+
+		context = {
+			'current_directory' : current_directory,
+			'child_directories' : child_directories,
+			'documents' : documents,
+			'parent_dir_pk' : current_directory.pk,
+			'create_dir_form' : create_dir_form,
+			'document_upload_form' : document_upload_form,
+			'current_path' : current_path,
+			'dir_update_form' : DirectoryCreationForm,
+			'dir_access_form' : dir_access_form,
 		}	
 
 		return render(request, 'core/directory.html', context)	
 
+	else:
+		return HttpResponseForbidden('<h1>403 Forbidden</h1>')
 
+
+@method_decorator(allowed_users(allowed_roles=['admin']), name='dispatch')
 class DirectoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Directory
 	form_class = DirectoryCreationForm
@@ -159,38 +194,34 @@ class DirectoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	success_message = "Updated successfully"
 
 	def test_func(self):
-		usr = self.request.user
-		if usr.is_authenticated and usr.is_superuser:
-			directory = Directory.objects.get(pk = self.kwargs['pk'])
-			print(directory)
-			if usr.profile.branch == directory.branch and directory.name != 'root':
-				return True
-		else:
+		directory = Directory.objects.get(pk = self.kwargs['pk'])
+		if directory.name == 'root' and directory.parent_directory == None:
 			return False
+		else:
+			return True
 
 	def get_success_url(self):
 		return reverse('core:directory', kwargs = {'pk' : self.kwargs['pk']})
 
 
+@method_decorator(allowed_users(allowed_roles=['admin']), name='dispatch')
 class DirectoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 	model = Directory
 	template_name = 'core/dir_delete_confirmation.html'
 	success_url = '/'
 
 	def test_func(self):
-		usr = self.request.user
-		if usr.is_authenticated and usr.is_superuser:
-			directory = Directory.objects.get(pk = self.kwargs['pk'])
-			
-			if usr.profile.branch == directory.branch and directory.name != 'root':
-				return True
-		else:
+		directory = Directory.objects.get(pk = self.kwargs['pk'])
+		if directory.name == 'root' and directory.parent_directory == None:
 			return False
+		else:
+			return True
 
 	def get_success_url(self):
 		current_directory = Directory.objects.get(pk = self.kwargs['pk'])
 		parent_dir_pk = current_directory.parent_directory.pk
 		return reverse('core:directory', kwargs = {'pk' : parent_dir_pk})
+
 
 
 class DocumentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -200,10 +231,11 @@ class DocumentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 	def test_func(self):
 		usr = self.request.user
-		if usr.is_authenticated:
-			document = Document.objects.get(pk = self.kwargs['pk'])
-			
-			if usr.profile.branch == document.directory.branch:
+		document = Document.objects.get(pk = self.kwargs['pk'])
+		dirAccess = DirectoryAccess.objects.filter(directory=document.directory).filter(user=usr).exists()
+		if usr.groups.filter(name='admin').exists() == True:
+			return True
+		elif dirAccess == True:
 				return True
 		else:
 			return False
@@ -280,16 +312,23 @@ class CommonDocumentDeleteView(LoginRequiredMixin, DeleteView):
 def dirAccess(request, pk):
 	if request.method == 'POST':
 		try:
-			
-			form = DirAccessForm(request.POST or None)
-			if form.is_valid():
-				directory = Directory.objects.get(pk = pk)
-				
-				form.instance.directory = directory
-				form.instance.updated_by = request.user
-				
-				form.save()
+			usr = User.objects.get(pk = request.POST['user'])
+			directory = Directory.objects.get(pk = pk)
+
+			if (DirectoryAccess.objects.filter(user=usr).filter(directory=directory)).exists():
+				messages.success(request, f'User already have access to {directory.name} folder.')
 				return redirect('core:directory', pk=pk)
+
+			else:
+				form = DirAccessForm(request.POST or None)
+				if form.is_valid():
+					
+					
+					form.instance.directory = directory
+					form.instance.updated_by = request.user
+					
+					form.save()
+					return redirect('core:directory', pk=pk)
 		except:
 			return HttpResponse('Some error occured!!')
 
@@ -312,3 +351,4 @@ class DirAccessDeleteView(LoginRequiredMixin, DeleteView):
 	def get_success_url(self):
 		dir_access = DirectoryAccess.objects.get(pk = self.kwargs['pk'])
 		return reverse('core:directory', kwargs = {'pk' : dir_access.directory.pk})
+

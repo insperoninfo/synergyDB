@@ -8,7 +8,7 @@
     <div class="Button-nav ">
         <!-- drop down menu -->
         <div class="dropdown ">
-            <button  class="dropbtn  btn btn-outline-primary">{{ current_user_branch }}</button>
+            <button  class="dropbtn  btn btn-outline-primary">Home</button>
 
         </div>
 
@@ -52,17 +52,19 @@
 <!-- folder all folder create here -->
 <div class="container content-wrapper  " style=" margin-top: 40px; width:100%; height: 100vh; overflow: scroll; ">
 
-    <h3>{{ current_path }}</h3>
-    <h5>{{ current_user_branch }} Branch</h5>
+    <h3>Branches</h3>
+    
     <hr>
     <div class="folder pt-2" id="folder-file">
         <div class="row  " id="row">
+            {% for root_dir in root_dirs %}
             <div class=" col-2 col-md-2 col-sm-4 col-xs-4 mt-5" id="col">
 
                 <a href="{%  url 'core:directory' root_dir.pk %}"><i class="fa fa-folder" style="font-size:68px;color:#ffcc66;  "></i>
-            <br><span>{{ root_dir.name }}</span></a>
+            <br><span>{{ root_dir.branch }}</span></a>
 
             </div>
+            {% endfor %}
 
         </div>
     </div>
