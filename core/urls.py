@@ -9,7 +9,9 @@ from .views import (
 				DocumentDeleteView,
 				uploadCommonDocuments,
 				CommonDocumentDeleteView,
-				commonDocumentView
+				commonDocumentView,
+				dirAccess,
+				DirAccessDeleteView,
 			)
 
 app_name = 'core'
@@ -25,5 +27,6 @@ urlpatterns = [
 	path('upload-common-document', uploadCommonDocuments, name='upload-common-document'),
 	path('delete-common-document/<int:pk>', CommonDocumentDeleteView.as_view(), name='delete-common-document'),
 	path('common-documents', commonDocumentView, name='common-documents'),
-
+	path('dir-access/<int:pk>', dirAccess, name='dir-access'),
+	path('dir-access-remove/<int:pk>', DirAccessDeleteView.as_view(), name='dir-access-remove'),
 ]

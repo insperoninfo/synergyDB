@@ -23,7 +23,7 @@ def get_upload_path(instance, filename):
 class Directory(models.Model):
 	name = models.CharField(max_length=256)
 	parent_directory = models.ForeignKey('self', blank=True, null=True,  on_delete = models.CASCADE)
-	branch = models.CharField(max_length=56, choices=BRANCH_CHOICES)
+	branch = models.CharField(max_length=64, choices=BRANCH_CHOICES)
 	created_at = models.DateTimeField(auto_now_add = True)
 	updated_at = models.DateTimeField(auto_now = True)
 	updated_by = models.ForeignKey(User, null=True, on_delete = models.SET_NULL)
@@ -80,6 +80,16 @@ class CommonDocument(models.Model):
 
 	def __str__(self):
 		return os.path.join(self.filename())
+
+
+class DirectoryAccess(models.Model):
+	directory = models.ForeignKey(Directory, on_delete=models.CASCADE)
+	user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name='assigned_to_user')
+	updated_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='updated_by')
+	updated_at = models.DateTimeField(auto_now = True)
+
+	def __str__(self):
+		return f'{self.directory.str_()} - {self.user}'
 
 
 # @receiver(pre_save, sender=Directory)

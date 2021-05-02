@@ -1,4 +1,4 @@
-from .models import Directory, Document, CommonDocument
+from .models import Directory, Document, CommonDocument, DirectoryAccess
 from django import forms
 from django.forms import ClearableFileInput
 
@@ -27,3 +27,10 @@ class CommonDocumentUploadForm(forms.ModelForm):
 		widgets = {
             'file': ClearableFileInput(attrs={'multiple': True}),
         }
+
+
+class DirAccessForm(forms.ModelForm):
+
+	class Meta:
+		model =DirectoryAccess
+		fields = ('user',)

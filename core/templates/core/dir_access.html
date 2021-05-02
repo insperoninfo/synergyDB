@@ -1,0 +1,13 @@
+
+	
+<div class="">
+	<form method="post"  enctype="multipart/form-data">
+			{% csrf_token %}
+	  		<h5>Folder Access</h5><br>
+	  		
+		  {{ dir_access_form.as_p }}
+	  
+	  <button type="submit">Create</button>
+	</form>
+</div>
+

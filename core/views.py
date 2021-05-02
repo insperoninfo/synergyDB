@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, HttpResponse, reverse
 from .decorators import allowed_users
 import os
 from django.contrib.auth.decorators import login_required
-from .models import Directory, Document, CommonDocument
-from .forms import DirectoryCreationForm, DocumentUploadForm, CommonDocumentUploadForm
+from .models import Directory, Document, CommonDocument, DirectoryAccess
+from .forms import DirectoryCreationForm, DocumentUploadForm, CommonDocumentUploadForm, DirAccessForm
 from django.contrib import messages
 from django.views.generic import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -274,3 +274,41 @@ class CommonDocumentDeleteView(LoginRequiredMixin, DeleteView):
 	model = CommonDocument
 	template_name = 'core/document_delete_confirmation.html'
 	success_url = '/'
+
+
+@allowed_users(allowed_roles=['admin'])
+def dirAccess(request, pk):
+	if request.method == 'POST':
+		try:
+			
+			form = DirAccessForm(request.POST or None)
+			if form.is_valid():
+				directory = Directory.objects.get(pk = pk)
+				
+				form.instance.directory = directory
+				form.instance.updated_by = request.user
+				
+				form.save()
+				return redirect('core:directory', pk=pk)
+		except:
+			return HttpResponse('Some error occured!!')
+
+	else:
+
+		dir_access_form = DirAccessForm()
+
+		context = {
+			'dir_access_form' : dir_access_form
+		}
+
+		return render(request, 'core/dir_access.html', context)
+
+
+@method_decorator(allowed_users(allowed_roles=['admin']), name='dispatch')
+class DirAccessDeleteView(LoginRequiredMixin, DeleteView):
+	model = DirectoryAccess
+	template_name = 'core/dir_access_delete_confirmation.html'
+	
+	def get_success_url(self):
+		dir_access = DirectoryAccess.objects.get(pk = self.kwargs['pk'])
+		return reverse('core:directory', kwargs = {'pk' : dir_access.directory.pk})
