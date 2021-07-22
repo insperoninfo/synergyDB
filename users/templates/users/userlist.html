@@ -19,7 +19,11 @@
 
 		<strong>@{{ user.username }}</strong>&nbsp;&nbsp; &nbsp; &nbsp; {{ user.get_full_name }}
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ user.profile.branch }}
-		&nbsp;&nbsp;<a type="button" href="{% url 'users:update-user' user.pk %}" class="btn btn-primary btn-sm">Update</a>
+		&nbsp;&nbsp;<a type="button" href="{% url 'users:update-user' user.pk %}" class="btn btn-primary btn-sm">Update User Info</a>
+		&nbsp;&nbsp;
+		<a href="{% url 'users:update-profile' user.profile.pk %}">
+            <button class="btn btn-primary">Update User Profile</button>
+        </a>
 		&nbsp;&nbsp; <a type="button" href="{% url 'users:delete-user' user.pk %}" class="btn btn-danger btn-sm">Delete</a>
 		<br><br>
 	{% endfor %}

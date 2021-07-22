@@ -16,6 +16,7 @@ BRANCH_CHOICES = (
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    designation = models.CharField(max_length=256, blank=True, null=True)
     address = models.CharField(max_length=256, blank=True)
     gender = models.CharField(max_length=15, choices=GENDER_CHOICES)
     branch = models.CharField(max_length=50, choices=BRANCH_CHOICES)

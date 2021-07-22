@@ -52,7 +52,7 @@ def createUser(request):
 @method_decorator(allowed_users(allowed_roles=['admin']), name='dispatch')
 class ProfileUpdateView(UpdateView):
 	model = Profile
-	fields = ['branch', 'phone', 'address', 'gender']
+	fields = ['designation','branch', 'phone', 'address', 'gender']
 	template_name = 'users/update_profile.html'
 
 	success_message =  'User Profile Updated.'   
