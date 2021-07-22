@@ -170,7 +170,18 @@ def directoryContent(request, pk):
 
 	elif (dirAccess == True or (current_directory.name == 'root' and current_directory.parent_directory == None)):
 		child_directories = Directory.objects.filter(parent_directory=current_directory).filter(directoryaccess__user=current_user)
-		documents = Document.objects.filter(directory = current_directory)
+		document_list = Document.objects.filter(directory = current_directory)
+
+
+		# for pagination
+		page = request.GET.get('page', 1)
+		paginator = Paginator(document_list, 8)
+		try:
+			documents = paginator.page(page)
+		except PageNotAnInteger:
+			documents = paginator.page(1)
+		except EmptyPage:
+			documents = paginator.page(paginator.num_pages)
 
 		current_path = current_directory.str_()
 
