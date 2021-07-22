@@ -303,6 +303,7 @@
 
                     <small><a href="{% url 'core:delete-document' document.pk %}">Delete</a></small>
                 </div>
+                <br>
 
 
             </div>
@@ -314,8 +315,36 @@
 
 
         </div>
-    </div>
 
+
+
+   
+
+    </div>
+    <br>
+     <!-- Pagination starts -->
+        {% if documents.has_other_pages %}
+          <div class="pagination">
+            {% if documents.has_previous %}
+              <a href="?page={{ documents.previous_page_number }}">&laquo;</a>
+            {% endif %}
+
+            {% for i in documents.paginator.page_range %}
+              {% if documents.number == i %}
+               <a class="active"><span>{{ i }}</span></a> 
+              {% else %}
+                <a href="?page={{ i }}">{{ i }}</a>
+              {% endif %}
+            {% endfor %}
+            {% if documents.has_next %}
+              <a href="?page={{ documents.next_page_number }}">&raquo;</a>
+            
+            {% endif %}
+          </div>
+        {% endif %}
+
+    <!-- Pagination ends -->
+    <br>
 
     <!--  end floder llist and diplay block -->
 

@@ -89,6 +89,7 @@
                     	<small><a href="{% url 'core:delete-common-document' document.pk %}">Delete</a></small>
                     {% endif %}
                 </div>
+                <br>
 
             </div>
 
@@ -99,22 +100,32 @@
 
         </div>
     </div>
-    <br><br>
-    <div class="pagination">
-                <span class="step-links">
-                    {% if common_documnts.has_previous %}          
-                        <a href="?page={{ common_documnts.previous_page_number }}">previous</a>
-                    {% endif %}
+    
+    <br>
+     <!-- Pagination starts -->
+        {% if common_documnts.has_other_pages %}
+          <div class="pagination">
+            {% if common_documnts.has_previous %}
+              <a href="?page={{ common_documnts.previous_page_number }}">&laquo;</a>
+            {% endif %}
 
-                    <span class="current">
-                      {{ common_documnts.number }}
-                    </span>
+            {% for i in common_documnts.paginator.page_range %}
+              {% if common_documnts.number == i %}
+               <a class="active"><span>{{ i }}</span></a> 
+              {% else %}
+                <a href="?page={{ i }}">{{ i }}</a>
+              {% endif %}
+            {% endfor %}
+            {% if common_documnts.has_next %}
+              <a href="?page={{ common_documnts.next_page_number }}">&raquo;</a>
+            
+            {% endif %}
+          </div>
+        {% endif %}
 
-                    {% if common_documnts.has_next %}
-                        <a href="?page={{ common_documnts.next_page_number }}">next</a>
-                    {% endif %}
-                </span>
-    </div>
+    <!-- Pagination ends -->
+    <br>
+
 
 
 

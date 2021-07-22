@@ -11,8 +11,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseForbidden
 from users.views import AdminRequiredMixin
 from .check_file import check_if_file_exists
-from django.core.paginator import Paginator
 from django.utils.decorators import method_decorator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 @login_required
@@ -22,7 +22,7 @@ def index(request):
 		current_user_branch = current_user.profile.branch
 
 
-		common_documnts = CommonDocument.objects.filter()
+		common_documnts = CommonDocument.objects.filter()[:4]
 
 		root_dirs = Directory.objects.filter(name='root').filter(parent_directory=None)
 
@@ -131,7 +131,18 @@ def directoryContent(request, pk):
 
 	if (current_user.groups.filter(name='admin').exists() == True) or current_user.is_superuser:
 		child_directories = Directory.objects.filter(parent_directory=current_directory)
-		documents = Document.objects.filter(directory = current_directory)
+		document_list = Document.objects.filter(directory = current_directory)
+
+		# for pagination
+		page = request.GET.get('page', 1)
+		paginator = Paginator(document_list, 8)
+		try:
+			documents = paginator.page(page)
+		except PageNotAnInteger:
+			documents = paginator.page(1)
+		except EmptyPage:
+			documents = paginator.page(paginator.num_pages)
+
 
 		current_path = current_directory.str_()
 
@@ -251,7 +262,7 @@ def commonDocumentView(request):
 
 	form = CommonDocumentUploadForm()
 
-	paginator = Paginator(common_documnts_list, 4)
+	paginator = Paginator(common_documnts_list, 8)
 
 	page = request.GET.get('page', 1)
 
