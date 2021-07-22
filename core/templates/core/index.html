@@ -103,9 +103,11 @@
         </div>
          <br><br>
 
+         {% if  common_documnts|length >= 4 %}
             <a href="{% url 'core:common-documents' %}">
-                <button type="button" class="btn btn-info">View More</button>
+                <button type="button" class="btn btn-info">View More </button>
             </a>
+        {% endif %}
     </div>
 
 
