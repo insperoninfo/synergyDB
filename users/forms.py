@@ -11,3 +11,13 @@ class UserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('first_name','last_name', 'username', 'email', 'groups', 'password1' ,'password2' )
+
+
+class UserUpdateForm(forms.ModelForm):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ('first_name','last_name', 'username', 'email', 'groups' )

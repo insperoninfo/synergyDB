@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .forms import UserForm
+from .forms import UserForm, UserUpdateForm
 from django.views.generic import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Profile
@@ -104,7 +104,7 @@ def userList(request):
 @method_decorator(allowed_users(allowed_roles=['admin']), name='dispatch')
 class UserUpdateView(UpdateView):
 	model = User
-	form_class = UserForm
+	form_class = UserUpdateForm
 	template_name = 'users/update_user.html'
 	
 	def get_success_url(self):
