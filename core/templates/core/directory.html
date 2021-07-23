@@ -281,10 +281,26 @@
     </div>
     <br>
     <br>
+
+    <style type="text/css">
+        .filter_date_href{
+            margin-left: 80%;
+            
+        }
+        .filter_date_button{
+            margin-bottom: 15px;
+        }
+    </style>
     <!--  file thumbnails here -->
     <div class="container-file">
         <h5>Files</h5>
-        <hr>
+        <br>
+
+        <a class="filter_date_href" href="{% url 'core:filter-date' current_directory.pk %}">
+            <button class="btn btn-info filter_date_button">Filter By Date</button>
+            <br>
+        </a>
+        
         <!-- exel colum -->
         <div class="row">
             {% for document in documents %}

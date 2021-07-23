@@ -600,3 +600,14 @@ p small {
 }
 
 .pagination a:hover:not(.active) {background-color: #ddd;}
+
+
+
+.datepicker_form{
+    display: table ;
+
+}
+.datepicker_form_element{
+    display: table-cell;
+    padding-left: 10px;
+}

@@ -13,6 +13,7 @@ from .views import (
 				dirAccess,
 				DirAccessDeleteView,
 				accessList,
+				filterByDate,
 			)
 
 app_name = 'core'
@@ -31,4 +32,5 @@ urlpatterns = [
 	path('dir-access/<int:pk>', dirAccess, name='dir-access'),
 	path('dir-access-remove/<int:pk>', DirAccessDeleteView.as_view(), name='dir-access-remove'),
 	path('access-list/<int:pk>', accessList, name='access-list'),
+	path('filter-date/<int:pk>', filterByDate, name='filter-date')
 ]

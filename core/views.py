@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse, reverse
 from .decorators import allowed_users
 import os
+import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import Directory, Document, CommonDocument, DirectoryAccess
@@ -387,3 +388,46 @@ def accessList(request, pk):
 	}
 
 	return render(request, 'core/access_list.html', context)
+
+
+@login_required
+def filterByDate(request, pk):
+	current_user = request.user
+	current_directory = Directory.objects.get(pk=pk)
+	dirAccess = DirectoryAccess.objects.filter(directory=current_directory).filter(user=current_user).exists()
+
+	if request.method == 'POST':
+		from_date = request.POST.get('from_date')
+		to_date = request.POST.get('to_date')
+
+		if (current_user.groups.filter(name='admin').exists() == True) or current_user.is_superuser:
+			
+			# document_list = Document.objects.filter(directory = current_directory)
+
+
+
+			document_list = Document.objects.filter(directory = current_directory).filter(updated_at__gte=datetime.datetime.strptime(from_date, "%m/%d/%Y").date(),
+		                                updated_at__lte=datetime.datetime.strptime(to_date, "%m/%d/%Y").date())
+
+			print(document_list)
+
+		elif (dirAccess == True or (current_directory.name == 'root' and current_directory.parent_directory == None)):
+			# document_list = Document.objects.filter(directory = current_directory)
+			document_list = Document.objects.filter(directory = current_directory).filter(updated_at__gte=datetime.datetime.strptime(from_date, "%m/%d/%Y").date(),
+		                                updated_at__lte=datetime.datetime.strptime(to_date, "%m/%d/%Y").date())
+
+
+		elif (dirAccess == False):
+			return HttpResponseForbidden('<h1>403 Forbidden, You do not have access to this folder.</h1>')
+
+
+		context = {
+			"documents" : document_list,
+			'current_directory' : current_directory,
+			'from_date' : from_date,
+			'to_date' : to_date,
+		}
+		return render(request, 'core/filter.html', context)
+
+	elif request.method == 'GET':
+		return render(request, 'core/filter.html')
