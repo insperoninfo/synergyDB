@@ -1,5 +1,4 @@
-{% load static %}
-{% load custom_tags %}
+{% load static %} {% load custom_tags %}
 <!DOCTYPE html>
 <html>
 
@@ -49,8 +48,7 @@
         <div id="sidebar">
             <div class="sidebar__title">
                 <div class="sidebar__img">
-                    <img src="{% static 'core/images/synergy.png'  %}">
-                   &nbsp; &nbsp; <strong>Synergy Management</strong>
+                    <img src="{% static 'core/images/synergy.png'  %}"> &nbsp; &nbsp; <strong>Synergy Management</strong>
                 </div>
                 <i onclick="closeSidebar()" class="fa fa-times" id="sidebarIcon" aria-hidden="true"></i>
             </div>
@@ -65,16 +63,16 @@
                     <i class="fa fa-user-secret" aria-hidden="true"></i>
                     <a href="#">Synergy-info</a>
                 </div> -->
-                
+
 
 
                 <!-- drop down  admin create -->
                 <div class="dropdown sidebar__link p-2">
                     <i class="fa fa-building-o"></i>
-                    <a href="{% url 'core:common-documents' %}">Public Documents</a>
+                    <a href="{% url 'core:common-documents' %}">Public </a>
                 </div>
 
-                    
+
 
                 <div class="dropdown sidebar__link p-2">
                     <i class="fa fa-user-secret" aria-hidden="true"></i>
@@ -83,7 +81,7 @@
                 </div>
 
                 {% if request.user|has_group:"admin" %}
-                    <div class="dropdown sidebar__link p-2">
+                <div class="dropdown sidebar__link p-2">
                     <i class="fa fa-user-secret" aria-hidden="true"></i>
                     <a class=" dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin
@@ -113,7 +111,7 @@
                     </div>
                 </div>
                 <!-- end drop down maneu -->
-               
+
                 <!-- {% if request.user|has_group:"admin" %}
                 <div class="sidebar__link">
                     <i class="fa fa-wrench"></i>
@@ -130,13 +128,13 @@
 
     <!-- Footer starts -->
     <!--============= footer here============================ -->
-    <footer class="sticky-footer" style="background: rgba(99, 107, 104, 0.3);">
+    <!-- <footer class="sticky-footer" style="background: rgba(99, 107, 104, 0.3);">
         <div class="container">
             <div class="text-center">
                 <small style="color: blueviolet;">Copyright © synergy 2021</small>
             </div>
         </div>
-    </footer>
+    </footer> -->
     <!-- ==============end the footer here============ -->
 
     <!-- Footer Ends -->

@@ -21,4 +21,4 @@ def message_notification(r_email,first_name,last_name):
 	    print(response.body)
 	    print(response.headers)
 	except Exception as e:
-	    print(e.message)
+	    print(f'{e} : Error!')

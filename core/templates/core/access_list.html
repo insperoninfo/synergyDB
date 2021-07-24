@@ -7,8 +7,33 @@
 <br>
     {% for access in access_list %}
 
-        @{{ access.user.username }} - {{ access.user.get_full_name }} &nbsp; &nbsp; <a type="button" class="btn btn-danger btn-sm" href="{% url 'core:dir-access-remove' access.pk %}">Remove Access</a> <br><br>
+        @{{ access.user.username }} - {{ access.user.get_full_name }} &nbsp; &nbsp; 
+        <!-- <a type="button" class="btn btn-danger btn-sm" href="{% url 'core:dir-access-remove' access.pk %}">Remove Access</a> <br><br> -->
 
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal-{{access.pk}}" style="font-size: 13px;">Remove Access</button>
+                    <!-- </a> -->
+                    <div class="modal" id="myModal-{{access.pk}}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+
+                                    {% include 'core/dir_access_delete_confirmation.html' with accesspk=access.pk usr=access.user dir=directory %}
+
+
+                                </div>
+
+                                <!-- Modal footer -->
+
+
+                            </div>
+                        </div>
+                    </div>
     {% endfor %}
 
 {% endblock %}

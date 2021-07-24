@@ -1,6 +1,6 @@
 
 
-<form method="post" action="{% url 'core:delete-document' documentpk %}">
+<form method="post" action="{% url 'core:delete-common-document' documentpk %}">
 	{% csrf_token %}
     <p>Are you sure you want to delete  this item?"</p>
     <input type="submit" value="Confirm">

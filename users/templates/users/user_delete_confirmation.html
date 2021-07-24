@@ -1,7 +1,7 @@
 
 
 
-<form method="post"  >
+<form method="post" action="{% url 'users:delete-user' userpk %}" >
 	{% csrf_token %}
     <p>Are you sure you want to delete @{{ user.username }} ({{ user.get_full_name }})? </p>
     <input type="submit" value="Confirm">

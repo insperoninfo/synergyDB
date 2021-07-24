@@ -268,7 +268,7 @@ class DocumentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 		parent_dir_pk = document.directory.pk
 		return reverse('core:directory', kwargs = {'pk' : parent_dir_pk})
 
-
+@login_required
 def commonDocumentView(request):
 	common_documnts_list = CommonDocument.objects.filter()
 
@@ -327,7 +327,7 @@ def uploadCommonDocuments(request):
 @method_decorator(allowed_users(allowed_roles=['admin']), name='dispatch')
 class CommonDocumentDeleteView(LoginRequiredMixin, DeleteView):
 	model = CommonDocument
-	template_name = 'core/document_delete_confirmation.html'
+	template_name = 'core/common_delete_confirmation.html'
 	success_url = '/'
 
 

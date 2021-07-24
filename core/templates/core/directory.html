@@ -1,11 +1,9 @@
-{% extends 'core/base.html' %} 
-{% load custom_tags %}
-{% block content %}
+{% extends 'core/base.html' %} {% load custom_tags %} {% block content %}
 <!-- log in form -->
 <!-- required bootstrap js -->
 
 
-<section style="padding:8px 10px; background: #F8F8F8;; height:8vh; border-bottom: 1px solid brown; text-align: center; align-items: center;">
+<section style="padding:8px 10px; background: #F8F8F8;; height:8vh; border-bottom: 1px solid brown; text-align: center; align-items: center; width: 100%; position: fixed; z-index: 999;">
     <div class="Button-nav ">
         <!-- drop down menu -->
         <div class="dropdown ">
@@ -13,7 +11,7 @@
 
             <div id="myDropdown" class="dropdown-content">
 
-                
+
                 <a class="item" data-toggle="modal" data-target="#myModal1">
                     <i class="fa fa-upload">Upload Files</i>
                 </a>
@@ -41,7 +39,7 @@
         <!-- end the dropdown -->
 
         <!-- Button to for create folder modal -->
-        {% if request.user|has_group:"admin" or request.user.is_superuser  %}
+        {% if request.user|has_group:"admin" or request.user.is_superuser %}
         <button type="button" class="btn btn-outline-primary  btn1" data-toggle="modal" data-target="#myModal">
 
          Create Directory 
@@ -49,8 +47,7 @@
         <i class="material-icons" style="font-size:15px">create_new_folder</i>
        </a>
 
-     </button>
-     {% endif %}
+     </button> {% endif %}
         <!-- uplaod -->
         {% if current_directory.parent_directory != None and current_directory.name != 'root' %}
         <button type="button" class="btn btn-outline-primary " data-toggle="modal" data-target="#myModal1">Upload File
@@ -59,30 +56,27 @@
                 <i class="fa fa-upload"></i>
             </a>
           
-          </button>
-      {% endif %}
+          </button> {% endif %}
         <!--end uplaod -->
 
 
         <!-- start logout -->
 
 
-        <div class="dropdown" id="profile">
+        <div class="dropdown " id="profile" style="padding-right: 150px;">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                {{ request.user.get_full_name }}<i class="fa fa-user fa-fw fa-2x"></i>
+                {{ request.user.get_full_name }}   <i class="fa fa-user-secret" aria-hidden="true"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li class="divider"></li>
                 <li><a href="{% url 'users:logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
             </ul>
         </div>
 
 
-
         <!-- end logout here -->
 
-       
+
 
 
 
@@ -120,7 +114,7 @@
 
 
 
-         <div class="modal" id="updateModel">
+        <div class="modal" id="updateModel">
             <div class="modal-dialog">
                 <div class="modal-content">
 
@@ -142,7 +136,7 @@
 
                 </div>
             </div>
-        </div>   
+        </div>
 
 
         <div class="modal" id="deleteModel">
@@ -167,7 +161,7 @@
 
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 
 
@@ -257,11 +251,11 @@
 <!-- <hr style=" border: 1px solid rgb(218, 182, 182); padding-top: 80px:"> -->
 
 <!-- ++++++++main-body-part++++++ -->
-
-<button class="m-2" onclick="goBack()"  style=" font-size: 12px; padding: 2px 4px; ">&larr; Back</button>
+<br><br>
+<button class="mt-5" onclick="goBack()" style=" font-size: 12px; padding: 2px 4px; position: fixed;  z-index: 999;  ;">&larr; Back</button>
 
 <!-- folder all folder create here -->
-<div class="container content-wrapper  " style=" margin-top: 40px; width:100%; height: 100vh; overflow: scroll; ">
+<div class="container content-wrapper  " style=" margin-top: 60px; width:100%; height: 100vh;">
 
     <h3>{{ current_path }}</h3>
     <h5>Folders</h5>
@@ -272,7 +266,10 @@
             <div class="card col-2 col-md-2 col-sm-4 col-xs-4 mt-5 " id="col">
 
                 <a href="{%  url 'core:directory' folder.pk %}"><i class="fa fa-folder" style="font-size:68px;color:#ffcc66;  "></i>
-            <br><p class="title">{{ folder.name }}</p></a>
+            <br><p class="title" style=" width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;">{{ folder.name }}</p></a>
 
             </div>
             {% endfor %}
@@ -283,11 +280,11 @@
     <br>
 
     <style type="text/css">
-        .filter_date_href{
+        .filter_date_href {
             margin-left: 80%;
-            
         }
-        .filter_date_button{
+        
+        .filter_date_button {
             margin-bottom: 15px;
         }
     </style>
@@ -300,7 +297,7 @@
             <button class="btn btn-info filter_date_button">Filter By Date</button>
             <br>
         </a>
-        
+
         <!-- exel colum -->
         <div class="row">
             {% for document in documents %}
@@ -317,47 +314,88 @@
 
                     <small style="font-size: 10px;">{{ document.updated_at }}</small>
 
-                    <small><a href="{% url 'core:delete-document' document.pk %}">Delete</a></small>
+                    <!-- <small><a href="{% url 'core:delete-document' document.pk %}">Delete</a></small> -->
+                    <!-- <a href="{% url 'core:delete-document' document.pk %}"> -->
+                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal-{{document.pk}}" style="font-size: 13px;">Delete</button>
+                    <!-- </a> -->
+
+                    <div class="modal" id="myModal-{{document.pk}}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+
+                                    {% include 'core/document_delete_confirmation.html' with documentpk=document.pk %}
+
+
+                                </div>
+
+                                <!-- Modal footer -->
+
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <br>
 
 
             </div>
-
-
-
             {% endfor %}
-
-
-
         </div>
 
 
 
-   
+
+            <!-- Modal -->
+           <!--  <div class="modal fade" id="myModal12" role="dialog">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                            <div class="modal-footer">
+                                <button>
+                                    <form method="post">{% csrf_token %}
+                                        <p>Are you sure you want to delete this item?"</p>
+                                        <input type="submit" value="Confirm">
+                                    </form>
+
+                                </button>
+                                <button type="button" class="btn btn-default"> </button>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- end the delete modal -->
+
+
+
+            
+
+
+
+
+
+
 
     </div>
     <br>
-     <!-- Pagination starts -->
-        {% if documents.has_other_pages %}
-          <div class="pagination">
-            {% if documents.has_previous %}
-              <a href="?page={{ documents.previous_page_number }}">&laquo;</a>
-            {% endif %}
-
-            {% for i in documents.paginator.page_range %}
-              {% if documents.number == i %}
-               <a class="active"><span>{{ i }}</span></a> 
-              {% else %}
-                <a href="?page={{ i }}">{{ i }}</a>
-              {% endif %}
-            {% endfor %}
-            {% if documents.has_next %}
-              <a href="?page={{ documents.next_page_number }}">&raquo;</a>
-            
-            {% endif %}
-          </div>
-        {% endif %}
+    <!-- Pagination starts -->
+    {% if documents.has_other_pages %}
+    <div class="pagination">
+        {% if documents.has_previous %}
+        <a href="?page={{ documents.previous_page_number }}">&laquo;</a> {% endif %} {% for i in documents.paginator.page_range %} {% if documents.number == i %}
+        <a class="active"><span>{{ i }}</span></a> {% else %}
+        <a href="?page={{ i }}">{{ i }}</a> {% endif %} {% endfor %} {% if documents.has_next %}
+        <a href="?page={{ documents.next_page_number }}">&raquo;</a> {% endif %}
+    </div>
+    {% endif %}
 
     <!-- Pagination ends -->
     <br>

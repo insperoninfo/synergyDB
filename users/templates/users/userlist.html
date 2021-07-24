@@ -1,32 +1,95 @@
-{% extends 'core/base.html' %} 
+{% extends 'core/base.html' %}{% block content %}
+<section style="padding:8px 10px; background: #F8F8F8;; height:8vh; border-bottom: 1px solid brown; text-align: center; align-items: center;">
+    <div class="Button-nav ">
+        <!-- drop down menu -->
 
 
-{% block content %}
-
-		<div style="margin-left: 20%; margin-right: 20%; text-align: center">
-			{% if messages %}
-       			{% for message in messages %}
-
-     				<div class="alert alert-{{ message.tags }}">
-         				{{ message }}
-					</div>
-
-         		{% endfor %}
-        	{% endif %}
-		</div>
-
-	{% for user in user_list %}
-
-		<strong>@{{ user.username }}</strong>&nbsp;&nbsp; &nbsp; &nbsp; {{ user.get_full_name }}
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ user.profile.branch }}
-		&nbsp;&nbsp;<a type="button" href="{% url 'users:update-user' user.pk %}" class="btn btn-primary btn-sm">Update User Info</a>
-		&nbsp;&nbsp;
-		<a href="{% url 'users:update-profile' user.profile.pk %}">
-            <button class="btn btn-primary">Update User Profile</button>
-        </a>
-		&nbsp;&nbsp; <a type="button" href="{% url 'users:delete-user' user.pk %}" class="btn btn-danger btn-sm">Delete</a>
-		<br><br>
-	{% endfor %}
+        <button class="m-2 " onclick="goBack() " style=" font-size: 12px; padding: 2px 4px; "><a href="{% url 'core:index' %} ">&larr; Back</a></button>
 
 
-{% endblock %}
+
+
+    </div>
+
+
+
+    <!--============ end logout modal=============== -->
+</section>
+
+    <div style="margin-left: 20%; margin-right: 20%; text-align: center">
+        {% if messages %} {% for message in messages %}
+
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+
+        {% endfor %} {% endif %}
+    </div>
+
+<!-- table  -->
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">pk</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Branch</th>
+                <th scope="col">Username</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        	{% for user in user_list %}
+	            <tr>
+	                <th scope="row">{{ user.pk }}</th>
+	                <td>{{ user.get_full_name }}</td>
+	                <td>{{ user.profile.branch }}</td>
+	                <td>@{{ user.username }}</td>
+	                <td>
+	                	<a type="button" href="{% url 'users:update-user' user.pk %}" class="btn btn-info btn-sm">Update User Info</a> &nbsp;&nbsp;
+					    <a href="{% url 'users:update-profile' user.profile.pk %}">
+					        <button class="btn btn-primary">Update User Profile</button>
+					    </a>
+					    &nbsp;&nbsp; 
+					    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#userdeletemodal-{{user.pk}}" style="font-size: 13px;">Delete</button>
+
+					    <div class="modal" id="userdeletemodal-{{user.pk}}">
+				            <div class="modal-dialog">
+				                <div class="modal-content">
+
+				                    <!-- Modal Header -->
+				                    <div class="modal-header">
+				                    </div>
+
+				                    <!-- Modal body -->
+				                    <div class="modal-body">
+
+				                        {% include 'users/user_delete_confirmation.html' with userpk=user.pk %}
+
+
+				                    </div>
+
+				                    <!-- Modal footer -->
+
+
+				                </div>
+				            </div>
+				        </div>
+	                </td>
+	            </tr>
+	            
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
+    <!-- end table -->
+
+            <!-- end the delete modal -->
+
+
+    
+    
+    {% endblock %}

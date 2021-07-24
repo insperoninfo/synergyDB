@@ -1,7 +1,7 @@
 
 
-<form method="post">
+<form method="post" action= "{% url 'core:dir-access-remove' accesspk %}">
 	{% csrf_token %}
-    <p>Are you sure you want to revoke "{{ object.user.get_full_name }}" access from "{{ object.directory }}"</p>
+    <p>Are you sure you want to revoke "{{ user.get_full_name }}" access from "{{ directory }}"</p>
     <input type="submit" value="Confirm">
 </form>
