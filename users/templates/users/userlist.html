@@ -32,7 +32,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">pk</th>
+                <th scope="col">s/n</th>
                 <th scope="col">Full Name</th>
                 <th scope="col">Branch</th>
                 <th scope="col">Username</th>
@@ -42,7 +42,7 @@
         <tbody>
         	{% for user in user_list %}
 	            <tr>
-	                <th scope="row">{{ user.pk }}</th>
+	                <th scope="row">{{ forloop.counter }}</th>
 	                <td>{{ user.get_full_name }}</td>
 	                <td>{{ user.profile.branch }}</td>
 	                <td>@{{ user.username }}</td>
