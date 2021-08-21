@@ -1,16 +1,40 @@
 {% extends 'core/base.html' %}{% block content %}
-<section style="padding:8px 10px; background: #F8F8F8;; height:8vh; border-bottom: 1px solid brown; text-align: center; align-items: center;">
+<section style="padding:8px 10px; background: #F8F8F8;; height:8vh; width: 100%; border-bottom: 1px solid brown; text-align: center; align-items: center;  position: fixed; z-index: 999;">
     <div class="Button-nav ">
         <!-- drop down menu -->
+        <div class="dropdown ">
+            <button class="m-2 " onclick="goBack() " style=" font-size: 12px; padding: 2px 4px; "><a href="{% url 'core:index' %} ">&larr; Back</a></button>
+
+        </div>
+
+        <!-- end the dropdown -->
+
+        <!-- start logout -->
 
 
-        <button class="m-2 " onclick="goBack() " style=" font-size: 12px; padding: 2px 4px; "><a href="{% url 'core:index' %} ">&larr; Back</a></button>
+        <div class="dropdown " id="profile" style="padding-right: 150px;">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                {{ request.user.get_full_name }}   <i class="fa fa-user-secret" aria-hidden="true"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="{% url 'users:logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
 
-
-
-
+        <!-- end log out -->
     </div>
 
+
+    <!-- searchbar -->
+
+    <div class="search">
+
+        <input class="searchbar" type="text" id="myInput" onkeyup="myFunction44()" placeholder="Search for names.." title="Type in a name">
+        <button type="submit" class="searchButton">
+                 <i class="fa fa-search"></i>
+              </button>
+    </div>
 
 
     <!--============ end logout modal=============== -->
@@ -29,7 +53,7 @@
 <!-- table  -->
 
 <div class="container">
-    <table class="table">
+    <table class="table" id="myTable">
         <thead>
             <tr>
                 <th scope="col">s/n</th>
@@ -90,6 +114,26 @@
             <!-- end the delete modal -->
 
 
+<script>
+    function myFunction44() {
+        var input44, filter44, table, tr, td, i, txtValue;
+        input44 = document.getElementById("myInput");
+        filter44 = input44.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter44) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
     
     
     {% endblock %}
