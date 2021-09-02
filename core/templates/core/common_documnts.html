@@ -70,7 +70,19 @@
             <div class="col-2 col-md-3 col-xs-4 file-">
 
                 <div href="#" class="card file-thamb " style="width: 8rem; border: 1px solid black;  ">
-                    <i class="fa fa-file-excel-o" style="font-size:68px;color: brown;"></i>
+                    {% if document.filename|slice:"-4:" == ".pdf" %}
+                    <i class="fa fa-file-pdf-o" style="font-size:68px;color: goldenrod;">
+                    </i> {% elif document.filename|slice:"-4:" == '.doc' or document.filename|slice:"-5:" == '.docx' %}
+                    <i class="fa fa-file-word-o" style="font-size:68px;color:red ;"></i> {% elif document.filename|slice:"-4:" == '.txt' %}
+                    <i class="fa fa-file-text-o" style="font-size:68px;color:green;"></i> {% elif document.filename|slice:"-4:" == '.pptx' %}
+                    <i class="fa fa-file-powerpoint-o" style="font-size:68px;color: rgb(42, 165, 97);"></i> {% elif document.filename|slice:"-4:" == '.jpg' %}
+                    <i class="fa fa-file-image-o" style="font-size:68px;color: brown;"></i> {% elif document.filename|slice:"-4:" == '.png' %}
+                    <i class="fa fa-file-image-o" style="font-size:68px;color: brown;"></i>
+                    {% elif document.filename|slice:"-4:" == '.zip' %}
+                    <i class="far fa-file-archive" style="font-size:68px"></i>
+                    {% else %}
+                    <i class="far fa-sticky-note" style="font-size:68px"></i>
+                     {% endif %}
 
                     <div class="f-name " style="  height: 30px width:200px;  overflow: scroll; font-size: 12px; padding: 5px 8px ; ">{{ document.updated_by.get_full_name }}</div>
                     <a href="{{ document.file.url }}">
