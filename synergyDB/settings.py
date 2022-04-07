@@ -87,9 +87,9 @@ WSGI_APPLICATION = 'synergyDB.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'synergy1',
-        'USER': 'synergy',
-        'PASSWORD' : 'xyz123@synergy',
+        'NAME': 'myproject',
+        'USER': 'myprojectuser',
+        'PASSWORD' : 'password',
         'HOST' : 'localhost'
     }
 }
