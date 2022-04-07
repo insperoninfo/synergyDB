@@ -88,7 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'synergy',
-        'USER': 'synergy',
+        'USER': 'synergy1',
         'PASSWORD' : 'xyz123@synergy',
         'HOST' : 'localhost'
     }
